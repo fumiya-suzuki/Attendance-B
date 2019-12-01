@@ -8,7 +8,7 @@ class UsersController < ApplicationController
   
   
   def index
-    @users = User.paginate(page: params[:page])
+    @users = User.paginate(page: params[:page]).search(params[:search])
   end
   
   def show
@@ -58,6 +58,15 @@ class UsersController < ApplicationController
       flash[:danger] = "#{@user.name}の更新は失敗しました。<br>" + @user.errors.full_messages.join("<br>")
     end
     redirect_to users_url
+  end
+  
+  def search
+    @users = User.search(params[:search])
+  end
+  
+  def self.search(search)
+    return User.all unless search
+    User.where(['content LIKE ?', "%#{search}%"])
   end
 
   private

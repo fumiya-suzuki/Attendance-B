@@ -48,4 +48,12 @@ class User < ApplicationRecord
     def forget
         update_attribute(:remember_digest, nil)
     end
+    
+    def self.search(search)
+        if search
+            User.where(['name LIKE ?', "%#{search}%"])
+        else
+            User.all
+        end
+    end
 end
