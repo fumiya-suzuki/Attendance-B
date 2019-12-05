@@ -8,6 +8,12 @@ class Attendance < ApplicationRecord
   validate :finished_at_is_invalid_without_a_started_at
   # 出勤･退勤時間どちらも存在するとき、出勤時間より早い退勤時間は無効
   validate :started_at_than_finished_at_fast_if_invalid
+  # 出勤･退勤時間どちらも存在するとき、どちらか片方のみの削除は不可能
+  validate :started_at_or_finished_at_cannot_only_delete
+  # 出勤･退勤時間どちらも存在するとき、どちらか片方のみの変更は無効
+  validate :started_at_or_finished_at_only_change_is_invalid
+  
+  
   
   def finished_at_is_invalid_without_a_started_at
     errors.add(:started_at, "が必要です") if started_at.blank? && finished_at.present?
@@ -16,6 +22,22 @@ class Attendance < ApplicationRecord
   def started_at_than_finished_at_fast_if_invalid
     if started_at.present? && finished_at.present?
       errors.add(:started_at, "より早い退勤時間は無効です") if started_at > finished_at
+    end
+  end
+  
+  def started_at_or_finished_at_cannot_only_delete
+    if started_at_was.present? && finished_at_was.present?
+     errors.add(:finshed_at, "のみの削除は出来ません") unless (started_at.nil? && finished_at.nil?) || (started_at.present? && finished_at.present?)
+    end  
+  end
+
+  def started_at_or_finished_at_only_change_is_invalid
+    if started_at_was.present? && finished_at_was.present?
+      if (started_at_was == started_at) && (finished_at_was != finished_at)
+        errors.add(:finshed_at, "のみの更新は出来ません") 
+      elsif (started_at_was != started_at) && (finished_at_was == finished_at)
+        errors.add(:started_at, "のみの更新は出来ません") 
+      end
     end
   end
 end
