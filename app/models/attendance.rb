@@ -8,8 +8,10 @@ class Attendance < ApplicationRecord
   validate :finished_at_is_invalid_without_a_started_at
   # 出勤･退勤時間どちらも存在するとき、出勤時間より早い退勤時間は無効
   validate :started_at_than_finished_at_fast_if_invalid
-  # 出勤･退勤時間どちらも存在するとき、どちらか片方のみの削除は不可能
-  validate :started_at_or_finished_at_cannot_only_delete
+  # 出勤･退勤時間どちらも存在するとき、退勤時間のみの削除は不可能
+  validate :finished_at_cannot_only_delete
+  # 出勤･退勤時間どちらも存在するとき、出勤時間のみの削除は不可能
+  validate :started_at_cannot_only_delete
   # 出勤･退勤時間どちらも存在するとき、どちらか片方のみの変更は無効
   validate :started_at_or_finished_at_only_change_is_invalid
   
@@ -25,11 +27,18 @@ class Attendance < ApplicationRecord
     end
   end
   
-  def started_at_or_finished_at_cannot_only_delete
+  def finished_at_cannot_only_delete
     if started_at_was.present? && finished_at_was.present?
      errors.add(:finshed_at, "のみの削除は出来ません") unless (started_at.nil? && finished_at.nil?) || (started_at.present? && finished_at.present?)
     end  
   end
+  
+  def started_at_cannot_only_delete
+    if started_at_was.present? && finished_at_was.present?
+     errors.add(:started_at, "のみの削除は出来ません") unless (started_at.nil? && finished_at.nil?) || (started_at.present? && finished_at.present?)
+    end  
+  end
+
 
   def started_at_or_finished_at_only_change_is_invalid
     if started_at_was.present? && finished_at_was.present?
