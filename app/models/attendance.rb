@@ -34,7 +34,7 @@ class Attendance < ApplicationRecord
   end
   
   def started_at_cannot_only_delete
-    if started_at_was.present? && finished_at_was.present?
+    if started_at_was.present? || finished_at_was.present?
      errors.add(:started_at, "のみの削除は出来ません") unless (started_at.nil? && finished_at.nil?) || (started_at.present? && finished_at.present?)
     end  
   end
