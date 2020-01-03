@@ -59,6 +59,21 @@
   }
 }
 
+
+.user-name{
+  a{
+      color: black;
+      text-decoration: none;
+  }
+  font-size: 20px;
+}
+
+.user-edit-btn{
+  a{
+    width: 100px;
+  }
+}
+
 /* 基本情報編集モーダルウインドウ */
 
 .label-basic-info {
