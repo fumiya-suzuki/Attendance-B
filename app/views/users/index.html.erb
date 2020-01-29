@@ -10,7 +10,7 @@
   <p>検索</p>
     <%= form_tag users_path, method: 'get' do %>
       <%= text_field_tag :search, params[:search], class: "form-control form-search" %>
-      <%= submit_tag '検索', :name => nil, class: "btn btn-lg btn-info search-btn" %>
+      <%= submit_tag '検索', :name => nil, class: "btn btn-lg btn-primary search-btn" %>
     <% end %>
 </div>
 
@@ -23,12 +23,19 @@
             data: { confirm: "削除してよろしいですか？"},
             class: "btn btn-primary" %>
       <div class="jumbotron user-edit-btn">
-        <%= link_to "編集", edit_basic_info_user_path(user), remote: true, class: "btn btn-primary btn-lg" %>
+        <h4 class="panel-title">
+          <button user data-toggle="collapse" data-parent="#accordion" href="#collapse<%= user.id %>" class="btn btn-primary btn-lg">編集</button>
+        </h4>
       </div>
+          <div id="collapse<%= user.id %>" class="panel-collapse collapse">
+            <div class="panel-body">
+             
+            </div>
+          </div>
       </div>
     <% end %>
   <%= will_paginate %>
 </div>
 
 <!--モーダルウインドウ表示-->
-<div id="edit-basic-info" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<!--<div id="edit-basic-info" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>-->
