@@ -5,6 +5,10 @@ class UsersController < ApplicationController
   before_action :admin_user, only: [:destroy, :edit_basic_info, :update_basic_info, :index]
   before_action :set_one_month, only: :show
   before_action :admin_or_correct_user, only: :show
+  before_action :update_employee, only: :update_basic_info
+  before_action :update, only: :update_basic_info
+  
+  
   
   
   def index
@@ -53,11 +57,19 @@ class UsersController < ApplicationController
   
   def update_basic_info
     if @user.update_attributes(basic_info_params)
-      flash[:success] = "#{@user.name}の基本情報を更新しました。"
+        flash[:success] = "#{@user.name}の基本情報を更新しました。"
     else
       flash[:danger] = "#{@user.name}の更新は失敗しました。<br>" + @user.errors.full_messages.join("<br>")
     end
     redirect_to users_url
+  end
+  
+  def update_employee
+    if @user.update_attributes(employee_params)
+      flash[:success] ="#{@user.name}の基本情報を更新しました。"
+    else
+      flash[:danger] = "#{@user.name}の更新は失敗しました。<br>" + @user.errors.full_messages.join("<br>")
+    end
   end
   
   def search
@@ -78,6 +90,10 @@ class UsersController < ApplicationController
       def basic_info_params
         params.require(:user).permit(:department, :basic_time, :work_time)
       end      
+      
+      def employee_params
+        params.require(:user).permit(:employee_number, :uid)
+      end
       
 
 end
