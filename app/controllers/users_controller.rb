@@ -80,6 +80,14 @@ class UsersController < ApplicationController
     return User.all unless search
     User.where(['content LIKE ?', "%#{search}%"])
   end
+  
+  def start_employee
+    Attendance.where.not(started_at: nil).each do |attendance|
+      if (Date.current == attendance.worked_on) && attendance.finished_at.nil?
+        @users = User.all.includes(:attendances)
+      end
+    end
+  end
 
   private
   
