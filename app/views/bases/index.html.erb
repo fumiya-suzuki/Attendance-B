@@ -1,0 +1,32 @@
+<h1>拠点一覧</h1>
+
+  <table class="table table-bordered table-condensed table-hover" id="table-attendances">
+    <tr>
+      <th></th>
+      <th></th>
+      <th>拠点番号</th>
+      <th>拠点名</th>
+      <th>勤怠種類</th>
+    </tr>
+  <% @bases.each do |base| %>
+    <tr>
+      <td>
+        <%= link_to "修正", edit_basis_path(base), class: "btn btn-primary" %>
+      </td>
+      <td>
+        <%= link_to "削除", base, method: :delete,
+            data: { confirm: "削除してよろしいですか？"},
+            class: "btn btn-primary" %>
+      </td>
+      <td><%= base.base_number %></td>
+      <td><%= base.base_name %></td>
+      <td><%= base.base_type %></td>
+    </tr>
+  <% end %>
+  </table>
+  
+  <div class="jumbotron">
+    <%= link_to "拠点情報追加", bases_new_path ,class: "btn btn-primary btn-lg" %>
+  </div>
+  
+  
