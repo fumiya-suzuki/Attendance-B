@@ -40,10 +40,10 @@ ActiveRecord::Schema.define(version: 20200201145200) do
     t.string "remember_digest"
     t.boolean "admin", default: false
     t.string "department"
-    t.datetime "basic_time", default: "2020-01-28 23:00:00"
-    t.datetime "work_time", default: "2020-01-28 22:30:00"
-    t.datetime "basic_start_time", default: "2020-01-28 23:00:00"
-    t.datetime "basic_leave_time", default: "2020-01-29 08:00:00"
+    t.datetime "basic_time", default: "2020-02-03 23:00:00"
+    t.datetime "work_time", default: "2020-02-03 22:30:00"
+    t.datetime "basic_start_time", default: "2020-02-03 23:00:00"
+    t.datetime "basic_leave_time", default: "2020-02-04 08:00:00"
     t.boolean "superior", default: false
     t.integer "employee_number"
     t.string "uid"

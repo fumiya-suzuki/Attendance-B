@@ -22,14 +22,24 @@
   </table>
 </div>
 
+<div>
+  <% if current_user.superior? %>
+    <div class="btn-superior">
+      <li><%= link_to  "【所属長承認申請のお知らせ】", '#' %></li>
+      <li><%= link_to  "【勤怠変更申請のお知らせ】", '#' %></li>
+      <li><%= link_to  "【残業申請のお知らせ】", '#' %></li>
+    </div>
+  <% end %>
 
-<div class="btn-users-show">
-  <%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-primary" %>
-  <%= link_to "CSV出力", "#", class: "btn btn-primary" %>
-</div>
+  <div class="btn-users-show">
+    <%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-primary" %>
+    <%= link_to "CSV出力", "#", class: "btn btn-primary" %>
+  </div>
 <div>
   <%= link_to "勤怠修正ログ(承認済)", "#", class: "btn btn-primary" %>
 </div>
+</div>
+
 <div>
   <table class="table table-bordered table-condensed table-hover" id="table-attendances">
     <thead>
