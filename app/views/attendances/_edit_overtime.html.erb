@@ -1,0 +1,59 @@
+<% provide(:class_text, 'basic-info') %>
+<% provide(:button_text, '更新') %>
+
+<div class="modal-dialog modal-lg modal-dialog-center">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h1 class="modal-title">残業申請</h1>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-9 col-md-offset-1">
+          <table  class="table table-bordered table-condensed table-hover">
+            <tr>
+              <th>日付</th>
+              <th>曜日</th>
+              <th>終了予定時間</th>
+              <th>翌日</th>
+              <th>業務処理内容</th>
+              <th>指示者確認㊞</th>
+            </tr>
+            
+            <%= form_with(model: @attendances, url: update_overtime_user_attendance_path, local: true, method: :patch) do |f| %>
+            <tr>
+              
+        <%
+        css_class =  
+        case $days_of_the_week[@attendance.worked_on.wday]
+        when '土'
+          'text-primary'
+        when '日'
+          'text-danger'
+        end
+        %>
+              <td><%= l(@attendance.worked_on, format: :short) %></td>
+              <td class="<%= css_class %>"><%= $days_of_the_week[@attendance.worked_on.wday] %></td>
+              <td><%= f.time_field :overtime, class: 'form-control' %></td>
+              <td></td>
+              <td><%= f.text_field :occupation, class: 'form-control'  %></td>
+              <td>
+              <form action="/users/id" method="POST", class="form_superior">
+                <select class="form-control">
+                <% @superior_users.each do |user| %>
+                  <option value= "#{user.id}"><%= user.name %></option>
+                <% end %>
+                </select>
+              </form>
+              </td>
+            </tr>
+          </table>
+          <%= f.submit yield(:button_text), class: "btn btn-primary btn-#{yield(:class_text)} overtime-btn" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
