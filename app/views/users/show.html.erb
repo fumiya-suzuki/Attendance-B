@@ -86,7 +86,7 @@
         %>
         <tr>
           <td>
-            <%= link_to "残業申請", edit_overtime_user_attendance_path(day), remote:true, class: "btn btn-primary btn-attendance" %>
+            <%= link_to "残業申請", attendances_edit_overtime_user_path(day), remote:true, class: "btn btn-primary btn-attendance" %>
           </td>
           <td>
             <%= l(day.worked_on, format: :short) %>
@@ -113,10 +113,10 @@
             <% end %>
           </td>
           <td><%= day.note %></td>
+          <td><%= day.scheduled_end_time %></td>
+          <td><%= day.scheduled_end_time %></td>
           <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td><%= day.occupation %></td>
           <td></td>
         </tr>
       <% end %>

@@ -17,15 +17,11 @@ Rails.application.routes.draw do
       get 'attendances/edit_one_month'
       patch 'attendances/update_one_month'
       get 'start_employee'
+      get 'attendances/edit_overtime'
+      patch 'attendances/update_overtime'
     end
-    resources :attendances do
-      member do
-        patch 'update'
-        get 'edit_overtime'
-        patch 'update_overtime'
-      end
-    end
+    resources :attendances, only: :update
   end
-  resources :bases
+     resources :bases
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

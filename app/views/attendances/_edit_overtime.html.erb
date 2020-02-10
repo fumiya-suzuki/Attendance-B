@@ -1,4 +1,4 @@
-<% provide(:class_text, 'basic-info') %>
+<% provide(:class_text, 'overtime') %>
 <% provide(:button_text, '更新') %>
 
 <div class="modal-dialog modal-lg modal-dialog-center">
@@ -22,8 +22,9 @@
               <th>指示者確認㊞</th>
             </tr>
             
-            <%= form_with(model: @attendances, url: update_overtime_user_attendance_path, local: true, method: :patch) do |f| %>
+            <%= form_with(model: @user, url: attendances_update_overtime_user_path(@attendance), local: true, method: :patch) do |f| %>
             <tr>
+              
               
         <%
         css_class =  
@@ -40,13 +41,7 @@
               <td></td>
               <td><%= f.text_field :occupation, class: 'form-control'  %></td>
               <td>
-              <form action="/users/id" method="POST", class="form_superior">
-                <select class="form-control">
-                <% @superior_users.each do |user| %>
-                  <option value= "#{user.id}"><%= user.name %></option>
-                <% end %>
-                </select>
-              </form>
+
               </td>
             </tr>
           </table>
