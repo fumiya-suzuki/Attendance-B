@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  superior_id: 1
+  superior_comfirm: 1
+  user: one
+
+two:
+  superior_id: 1
+  superior_comfirm: 1
+  user: two

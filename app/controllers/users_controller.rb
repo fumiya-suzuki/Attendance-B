@@ -16,6 +16,7 @@ class UsersController < ApplicationController
   end
   
   def show
+    @approval = Approval.new
     @superior_users = User.where(superior: true)
     @worked_sum = @attendances.where.not(started_at: nil).count
   end

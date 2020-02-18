@@ -86,7 +86,7 @@
         %>
         <tr>
           <td>
-            <%= link_to "残業申請", attendances_edit_overtime_user_path(day), remote:true, class: "btn btn-primary btn-attendance" %>
+            <%= link_to "残業申請", edit_overtime_user_attendance_path(@user, day), remote: true, class: "btn btn-primary btn-attendance" %>
           </td>
           <td>
             <%= l(day.worked_on, format: :short) %>
@@ -132,14 +132,10 @@
         <td rowspan="2", colspan="5"></td>
         <td rowspan="2">
           <p>所属長承認　未</p>
-          <form action="/users/id" method="POST", class="form_superior">
-            <select class="form-control">
-              <% @superior_users.each do |user| %>
-                <option value= "#{user.id}"><%= user.name %></option>
-              <% end %>
-            </select>
-          </form>
-          <%= link_to "申請", "#", class: "btn btn-primary" %>
+          <%= form_with(model: [@user, @approval], url: user_approvals_path(@user), method: :post, local: true) do |f| %>
+              <%= f.collection_select(:superior_id, User.where(superior: true) ,:id, :name, {prompt: ""}) %>
+            <%= f.submit "申請" ,class: "btn btn-primary" %>
+          <% end %>
         </td>
       </tr>
       <tr>
