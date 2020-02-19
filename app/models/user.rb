@@ -59,4 +59,7 @@ class User < ApplicationRecord
             User.all
         end
     end
+    
+    #どこからでもUser.superior_usersが呼び出せる
+    scope :superior_users, -> {where(superior: true)}
 end

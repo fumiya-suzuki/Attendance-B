@@ -1,25 +1,23 @@
 class ApprovalsController < ApplicationController
   protect_from_forgery
+
   
   def index
-
+    @user = User.find(params[:user_id])
+    @approvals = Approval.all
   end
   
-  def new
-    @approval = Approval.new
-  end
   
   def create
     @user = User.find(params[:user_id])
     @approval = @user.approvals.create(approvals_params)
-    @superior_user = User.where(superior: true)
+    @superior_user = User.superior_users
       if @approval.save
         flash[:success] = "申請しました！"
-        redirect_to user_path(@user)
       else
-        
-        
+        flash[:danger] = "申請する上長を選択してください"
       end
+    redirect_to user_path(@user)
   end
 
   

@@ -25,7 +25,7 @@
 <div>
   <% if current_user.superior? %>
     <div class="btn-superior">
-      <li><%= link_to  "【所属長承認申請のお知らせ】", '#' %></li>
+      <li><%= link_to  "【所属長承認申請のお知らせ】", user_approvals_path(@user) %></li>
       <li><%= link_to  "【勤怠変更申請のお知らせ】", '#' %></li>
       <li><%= link_to  "【残業申請のお知らせ】", '#' %></li>
     </div>
@@ -133,7 +133,7 @@
         <td rowspan="2">
           <p>所属長承認　未</p>
           <%= form_with(model: [@user, @approval], url: user_approvals_path(@user), method: :post, local: true) do |f| %>
-              <%= f.collection_select(:superior_id, User.where(superior: true) ,:id, :name, {prompt: ""}) %>
+              <%= f.collection_select(:superior_id, User.where(superior: true) ,:id, :name, {prompt: ""}, class: "form-control") %>
             <%= f.submit "申請" ,class: "btn btn-primary" %>
           <% end %>
         </td>

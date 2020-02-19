@@ -1,0 +1,11 @@
+<div>
+    <% @approvals.each do |approval| %>
+      <% if approval.superior_id == @user.id %>
+        <div class="container">
+          <h3><%= approval.user.name %>からの勤怠申請</h3>
+          <div>superior_id=<%= approval.superior_id %></div>
+          <div>user_id=<%= approval.user_id %></div>
+        </div>
+      <% end %>
+    <% end %>
+</div>
