@@ -20,7 +20,7 @@ class ApprovalsController < ApplicationController
     @user = User.find(params[:user_id])
     @approvals = Approval.all
     @approvals.where(superior_id: @user.id).each do |approval|
-      @users = User.all.includes(:approvals)
+    @users = User.all.includes(:approvals)
     end
     @first_day = params[:date].nil? ?
     Date.current.beginning_of_month : params[:date].to_date

@@ -148,7 +148,16 @@
         <td colspan="1">累計在社時間</td>
         <td rowspan="2", colspan="5"></td>
         <td rowspan="2">
-          <p><%= l(@first_day, format: :middle) %>所属長承認　未</p>
+          <p><%= l(@first_day, format: :middle) %>所属長承認　
+          <% if (@approvals == nil) || (@approvals.superior_comfirm == 0) %>
+            <div>なし</div>
+          <% elsif @approvals.superior_comfirm == 1 %>           
+            <div>申請中</div>
+          <% elsif @approvals.superior_comfirm == 2 %>
+            <div>承認</div>
+          <% elsif @approvals.superior_comfirm == 3 %>
+            <div>否認</div>
+          <% end %></p>
           <% if current_user?(@user) || current_user.admin? %>
             <%= form_with(model: [@user, @approval], url: user_approvals_path(@user), method: :post, local: true) do |f| %>
               <%= f.collection_select(:superior_id, User.where(superior: true) ,:id, :name, {prompt: ""}, class: "form-control") %>

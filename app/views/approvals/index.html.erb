@@ -43,6 +43,8 @@
   <% end %>
     <% unless @users == nil %>
       <%= f.submit "変更を送信する" ,class: "btn btn-primary btn-lg approval-btn" %>
+    <% else %>
+      <h2>現在申請はありません</h2>
     <% end %>
       </div>
     </div>
