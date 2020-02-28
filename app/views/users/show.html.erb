@@ -2,7 +2,15 @@
 <div>
   <table class="table table-bordered table-condensed user-table">
     <tr>
-      <td><%= link_to "←", user_path(date: @first_day.prev_month), class: "btn btn-default" %>【<%= l(@first_day, format: :middle) %>】勤怠管理表 <%= link_to "→", user_path(date: @first_day.next_month), class: "btn btn-default" %></td>
+      <td>
+        <% if current_user?(@user) || current_user.admin? %>
+          <%= link_to "←", user_path(date: @first_day.prev_month), class: "btn btn-default" %>
+        <% end %>
+          【<%= l(@first_day, format: :middle) %>】勤怠管理表 
+        <% if current_user?(@user) || current_user.admin? %>
+          <%= link_to "→", user_path(date: @first_day.next_month), class: "btn btn-default" %>
+        <% end %>
+      </td>
       <td>
         指定勤務開始時間:<%= format_basic_info(@user.basic_start_time) %>
         <br>指定勤務終了時間:<%= format_basic_info(@user.basic_leave_time) %></br>
@@ -23,6 +31,7 @@
 </div>
 
 <div>
+  <% if current_user?(@user) || current_user.admin? %>
   <% if current_user.superior? %>
     <div class="btn-superior">
       <li><%= link_to  "【所属長承認申請のお知らせ】", user_approvals_path(@user) %></li>
@@ -30,14 +39,16 @@
       <li><%= link_to  "【残業申請のお知らせ】", '#' %></li>
     </div>
   <% end %>
+  
 
   <div class="btn-users-show">
     <%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-primary" %>
     <%= link_to "CSV出力", "#", class: "btn btn-primary" %>
   </div>
-<div>
-  <%= link_to "勤怠修正ログ(承認済)", "#", class: "btn btn-primary" %>
-</div>
+  <div>
+    <%= link_to "勤怠修正ログ(承認済)", "#", class: "btn btn-primary" %>
+  </div>
+  <% end %>
 </div>
 
 <div>
@@ -86,7 +97,9 @@
         %>
         <tr>
           <td>
-            <%= link_to "残業申請", edit_overtime_user_attendance_path(@user, day), remote: true, class: "btn btn-primary btn-attendance" %>
+            <% if current_user?(@user) || current_user.admin? %>
+              <%= link_to "残業申請", edit_overtime_user_attendance_path(@user, day), remote: true, class: "btn btn-primary btn-attendance" %>
+            <% end %>
           </td>
           <td>
             <%= l(day.worked_on, format: :short) %>
@@ -95,15 +108,19 @@
           <td><%= day.started_at.floor_to(15.minutes).strftime('%H') if day.started_at.present? %></td>
           <td><%= day.started_at.floor_to(15.minutes).strftime('%M') if day.started_at.present? %></td>
           <td>
+            <% if current_user?(@user) || current_user.admin? %>
             <% if (Date.current == day.worked_on) && day.started_at.nil? %>
               <%= link_to "出勤", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attendance" %>
+            <% end %>
             <% end %>
           </td>
           <td><%= day.finished_at.floor_to(15.minutes).strftime('%H') if day.finished_at.present? %></td>
           <td><%= day.finished_at.floor_to(15.minutes).strftime('%M') if day.finished_at.present? %></td>
           <td>
+            <% if current_user?(@user) || current_user.admin? %>
             <% if (Date.current == day.worked_on) && day.started_at.present? && day.finished_at.nil? %>
               <%= link_to "退勤", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attendance" %>
+            <% end %>
             <% end %>
           </td>
           <td>
@@ -131,10 +148,15 @@
         <td colspan="1">累計在社時間</td>
         <td rowspan="2", colspan="5"></td>
         <td rowspan="2">
-          <p>所属長承認　未</p>
-          <%= form_with(model: [@user, @approval], url: user_approvals_path(@user), method: :post, local: true) do |f| %>
+          <p><%= l(@first_day, format: :middle) %>所属長承認　未</p>
+          <% if current_user?(@user) || current_user.admin? %>
+            <%= form_with(model: [@user, @approval], url: user_approvals_path(@user), method: :post, local: true) do |f| %>
               <%= f.collection_select(:superior_id, User.where(superior: true) ,:id, :name, {prompt: ""}, class: "form-control") %>
-            <%= f.submit "申請" ,class: "btn btn-primary" %>
+              <%= f.hidden_field :superior_comfirm, value: 1 %>
+              <%= f.hidden_field :approval_change, value: "false" %>
+              <%= f.hidden_field :month, value: @first_day %>
+              <%= f.submit "申請" ,class: "btn btn-primary" %>
+            <% end %>
           <% end %>
         </td>
       </tr>

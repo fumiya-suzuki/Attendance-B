@@ -1,11 +1,50 @@
 <div>
-    <% @approvals.each do |approval| %>
-      <% if approval.superior_id == @user.id %>
-        <div class="container">
-          <h3><%= approval.user.name %>からの勤怠申請</h3>
-          <div>superior_id=<%= approval.superior_id %></div>
-          <div>user_id=<%= approval.user_id %></div>
-        </div>
+<div class="btn-approval">
+  <%= form_with(model: @user, url: user_approval_path(@user, @approvals) , local: true, method: :put) do |f| %>
+    <% (@users || []).each do |user| %>
+   
+      <% unless (user.approvals.count == 0) %>
+    
+        <h3><%= user.name %>からの勤怠申請</h3>
+          <div class="container">
+            <table class="table table-bordered table-condensed table-hover">
+              <tr>
+                <th>月</th>
+                <th>指示者確認㊞</th>
+                <th>変更</th>
+                <th>勤怠を確認する</th>
+              </tr>
       <% end %>
+      <% @approvals.each do |approval| %>
+        <% if approval.user_id == user.id %>
+          <%= f.fields_for "approvals[]", approval do |a| %>
+            <% if (approval.superior_id == @user.id) %>
+              <tr>
+                <td><%= l(approval.month, format: :month, default: '-')  %></td>
+                <td>
+                  <%= a.select :superior_comfirm,[
+                      ["なし", 0],
+                      ["申請中", 1],
+                      ["承認", 2],
+                      ["否認", 3]
+                      ] ,{}, {class: "form-control"}
+                      %>
+                </td>
+                <td>
+                  <%= a.check_box :approval_change, id: :approval_checkbox, as: :boolean %>
+                </td>
+                <td><%= link_to "確認", user_path(approval.user) ,class: "btn btn-primary"%></td>
+              </tr>
+           <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+          </table>
+  <% end %>
+    <% unless @users == nil %>
+      <%= f.submit "変更を送信する" ,class: "btn btn-primary btn-lg approval-btn" %>
     <% end %>
+      </div>
+    </div>
+  <% end %>
 </div>
