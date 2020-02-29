@@ -24,7 +24,11 @@ Rails.application.routes.draw do
       patch 'update_overtime'
       end
     end
-    resources :approvals
+    resources :approvals do 
+      member do
+        patch 'approval_update'
+      end
+    end
   end
      resources :bases
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

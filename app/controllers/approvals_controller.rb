@@ -20,7 +20,7 @@ class ApprovalsController < ApplicationController
     @user = User.find(params[:user_id])
     @approvals = Approval.all
     @approvals.each do |approval|
-        @users = User.all.includes(:approvals).where(approvals: {superior_id: @user.id})
+      @users = User.includes(:approvals).where(approvals: {superior_id: @user.id})
     end
     @first_day = params[:date].nil? ?
     Date.current.beginning_of_month : params[:date].to_date
@@ -39,6 +39,22 @@ class ApprovalsController < ApplicationController
         end
     redirect_to user_path(@user)
   end
+  
+  def approval_update
+    @first_day = params[:date].nil? ?
+    Date.current.beginning_of_month : params[:date].to_date
+    @last_day = @first_day.end_of_month
+    one_month = [*@first_day..@last_day] # 対象の月の日数を代入します。
+    @user = User.find(params[:user_id])
+    @approval = @user.approvals.find_by(month: "#{@first_day}", user_id: @user.id)
+  
+    if @approval.update_attributes(app_params)
+      flash[:success] = "申請しました！"
+    else
+      flash[:danger] = "申請する上長を選択してください."
+    end
+    redirect_to user_path(@user)
+  end 
 
   private
   
@@ -48,5 +64,9 @@ class ApprovalsController < ApplicationController
     
     def approval_params
       params.require(:user).permit(approvals: [:superior_id, :superior_comfirm, :month])[:approvals]
+    end
+    
+    def app_params
+      params.require(:approval).permit(:superior_id)
     end
 end

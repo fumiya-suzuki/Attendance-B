@@ -3,6 +3,7 @@ class Approval < ApplicationRecord
   
     validates :user_id, presence: true
     validates :superior_id, presence: true
+    validates :month, uniqueness: {scope: :user_id}
     
     validate :superior_user_cannot_approval_own
     
