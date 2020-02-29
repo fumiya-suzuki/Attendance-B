@@ -102,4 +102,3 @@ class UsersController < ApplicationController
         params.require(:user).permit(:employee_number, :uid)
       end
 end
-

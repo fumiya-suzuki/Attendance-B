@@ -3,7 +3,7 @@
   <%= form_with(model: @user, url: user_approval_path(@user, @approvals) , local: true, method: :put) do |f| %>
     <% (@users || []).each do |user| %>
    
-      <% unless (user.approvals.count == 0) %>
+      <% unless user.approvals.count == 0 %>
     
         <h3><%= user.name %>からの勤怠申請</h3>
           <div class="container">

@@ -19,15 +19,14 @@ class ApprovalsController < ApplicationController
   def index
     @user = User.find(params[:user_id])
     @approvals = Approval.all
-    @approvals.where(superior_id: @user.id).each do |approval|
-    @users = User.all.includes(:approvals)
+    @approvals.each do |approval|
+        @users = User.all.includes(:approvals).where(approvals: {superior_id: @user.id})
     end
     @first_day = params[:date].nil? ?
     Date.current.beginning_of_month : params[:date].to_date
     @last_day = @first_day.end_of_month
     one_month = [*@first_day..@last_day] # 対象の月の日数を代入します。
   end
-  
   
   def create
     @user = User.find(params[:user_id])
@@ -41,7 +40,6 @@ class ApprovalsController < ApplicationController
     redirect_to user_path(@user)
   end
 
-  
   private
   
     def approvals_params
