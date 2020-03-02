@@ -1,12 +1,20 @@
-<div>
-<div class="btn-approval">
+<div class="modal-dialog modal-lg modal-dialog-center modal-content">
+  <div class="btn-approval">
+    <div class= "modal-title modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
   <%= form_with(model: @user, url: user_approval_path(@user, @approvals) , local: true, method: :put) do |f| %>
     <% (@users || []).each do |user| %>
    
       <% unless user.approvals.count == 0 %>
-    
-        <h3><%= user.name %>からの勤怠申請</h3>
-          <div class="container">
+        <div class="modal-header">
+          <h3 class= "modal-title">【<%= user.name %>からの勤怠申請】</h3>
+        </div>
+          
+          <div>
+            <div class= "modal-body">
             <table class="table table-bordered table-condensed table-hover">
               <tr>
                 <th>月</th>
@@ -18,7 +26,7 @@
       <% @approvals.each do |approval| %>
         <% if approval.user_id == user.id %>
           <%= f.fields_for "approvals[]", approval do |a| %>
-            <% if (approval.superior_id == @user.id) %>
+            <% if (approval.superior_id == @user.id) && (approval.superior_comfirm == 1)%>
               <tr>
                 <td><%= l(approval.month, format: :month, default: '-')  %></td>
                 <td>
@@ -40,12 +48,15 @@
         <% end %>
       <% end %>
           </table>
+        </div>
   <% end %>
-    <% unless @users == nil %>
+    <div class="modal-footer">
+    <% unless @users == [] %>
       <%= f.submit "変更を送信する" ,class: "btn btn-primary btn-lg approval-btn" %>
     <% else %>
       <h2>現在申請はありません</h2>
     <% end %>
+    </div>
       </div>
     </div>
   <% end %>

@@ -34,7 +34,14 @@
   <% if current_user?(@user) || current_user.admin? %>
   <% if current_user.superior? %>
     <div class="btn-superior">
-      <li><%= link_to  "【所属長承認申請のお知らせ】", user_approvals_path(@user) %></li>
+      <li>
+        <% if @approval_count == 0 %>
+          <%= link_to  "【所属長承認申請のお知らせ】", approvals_index_approvals_user_path(@user), remote: true %>
+        <% else %>
+          <%= link_to  "【所属長承認申請のお知らせ】", approvals_index_approvals_user_path(@user), remote:true, class: "text-danger" %>
+          <span class= "text-danger">申請が<%= @approval_count %>件あります</span>
+        <% end %>
+        </li>
       <li><%= link_to  "【勤怠変更申請のお知らせ】", '#' %></li>
       <li><%= link_to  "【残業申請のお知らせ】", '#' %></li>
     </div>
@@ -98,7 +105,7 @@
         <tr>
           <td>
             <% if current_user?(@user) || current_user.admin? %>
-              <%= link_to "残業申請", edit_overtime_user_attendance_path(@user, day), remote: true, class: "btn btn-primary btn-attendance" %>
+              <%= link_to "残業申請", edit_overtime_user_attendance_path(@user, day), class: "btn btn-primary btn-attendance" %>
             <% end %>
           </td>
           <td>
@@ -170,6 +177,7 @@
             <% else %>
               <%= form_with(model: [@user, @approval], url: approval_update_user_approval_path(@user), method: :patch, local: true) do |f| %>
                 <%= f.collection_select(:superior_id, User.where(superior: true) ,:id, :name, {prompt: ""}, class: "form-control") %>
+                <%= f.hidden_field :superior_comfirm, value: 1 %>
                 <%= f.submit "申請" ,class: "btn btn-success" %>
               <% end %>
             <% end %>
@@ -187,3 +195,6 @@
 
 <!--モーダルウインドウ表示-->
 <div id="edit-overtime" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+
+<!--モーダルウインドウ表示-->
+<div id="index-approvals" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>

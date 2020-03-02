@@ -16,11 +16,11 @@ class ApprovalsController < ApplicationController
     redirect_to @user
   end
   
-  def index
-    @user = User.find(params[:user_id])
+  def index_approvals
+    @user = User.find(params[:id])
     @approvals = Approval.all
     @approvals.each do |approval|
-      @users = User.includes(:approvals).where(approvals: {superior_id: @user.id})
+      @users = User.includes(:approvals).where(approvals: {superior_id: @user.id, superior_comfirm: 1})
     end
     @first_day = params[:date].nil? ?
     Date.current.beginning_of_month : params[:date].to_date
@@ -67,6 +67,6 @@ class ApprovalsController < ApplicationController
     end
     
     def app_params
-      params.require(:approval).permit(:superior_id)
+      params.require(:approval).permit(:superior_id, :superior_comfirm)
     end
 end

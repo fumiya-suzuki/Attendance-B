@@ -14,6 +14,7 @@ class UsersController < ApplicationController
   def show
     @approval = Approval.new
     @approvals = Approval.find_by(month: "#{@first_day}", user_id: @user.id)
+    @approval_count = Approval.where(superior_id: @user.id, superior_comfirm: 1).count
     @superior_users = User.where(superior: true)
     @worked_sum = @attendances.where.not(started_at: nil).count
   end
