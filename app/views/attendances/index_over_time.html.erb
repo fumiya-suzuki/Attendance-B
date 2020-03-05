@@ -1,0 +1,52 @@
+<div class= "btn-approval">
+  <%= form_with(model: @user, url: over_update_user_attendance_path(@user) , local: true, method: :patch) do |f| %>
+    <% (@users || []).each do |user| %>
+      <h1>【<%= user.name %>からの残業申請】</h1>
+        <table class="table table-bordered table-condensed table-hover">
+          <tr>
+            <th>日付</th>
+            <th>曜日</th>
+            <th>終了予定時間</th>
+            <th>指定勤務終了時間</th>
+            <th>時間外時間</th>
+            <th>業務処理内容</th>
+            <th>指示者確認㊞</th>
+            <th>変更</th>
+            <th>勤怠を確認する</th>
+          </tr>
+      <% @attendances.each do |attendance| %>
+        <% if user.id == attendance.user_id %>
+          <%= f.fields_for "attendances[]", attendance do |a| %>
+          <tr>
+            <td><%= l(attendance.worked_on, format: :short) %></td>
+            <td><%= $days_of_the_week[attendance.worked_on.wday] %></td>
+            <td><%= attendance.scheduled_end_time.floor_to(15.minutes).strftime('%H:%M')%></td>
+            <td></td>
+            <td></td>
+            <td><%= attendance.occupation %></td>
+            <td>
+              <%= a.select :over_confirm,[
+                      ["なし", 0],
+                      ["申請中", 1],
+                      ["承認", 2],
+                      ["否認", 3]
+                      ] ,{}, {class: "form-control"}
+                      %>
+            </td>
+            <td><%= a.check_box :over_change, id: :over_checkbox, as: :boolean %></td>
+            <td><%= link_to "確認", user_path(attendance.user) ,class: "btn btn-primary"%></td>
+          </tr>
+          <% end %>
+        <% end %>
+      <% end %>
+      </table>
+    <% end %>
+    <div class="modal-footer">
+      <% unless @users == [] %>
+        <%= f.submit "変更を送信する" ,class: "btn btn-primary btn-lg approval-btn" %>
+      <% else %>
+        <h2>現在申請はありません</h2>
+      <% end %>
+    </div>
+  <% end %>
+</div>

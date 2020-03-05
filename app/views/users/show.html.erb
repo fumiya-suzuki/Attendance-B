@@ -43,7 +43,7 @@
         <% end %>
         </li>
       <li><%= link_to  "【勤怠変更申請のお知らせ】", '#' %></li>
-      <li><%= link_to  "【残業申請のお知らせ】", '#' %></li>
+      <li><%= link_to  "【残業申請のお知らせ】", attendances_index_over_time_user_path(@user) %></li>
     </div>
   <% end %>
   
@@ -137,9 +137,13 @@
             <% end %>
           </td>
           <td><%= day.note %></td>
-          <td><%= day.scheduled_end_time %></td>
-          <td><%= day.scheduled_end_time %></td>
-          <td></td>
+          <td><%= day.scheduled_end_time.floor_to(15.minutes).strftime('%H') if day.scheduled_end_time.present? %></td>
+          <td><%= day.scheduled_end_time.floor_to(15.minutes).strftime('%M') if day.scheduled_end_time.present? %></td>
+          <td>
+            <% if day.scheduled_end_time.present? && day.finished_at.present?%>
+              <%= over_time = working_times(day.finished_at.floor_to(15.minutes), day.scheduled_end_time.floor_to(15.minutes)) %>
+            <% end %>
+          </td>
           <td><%= day.occupation %></td>
           <td></td>
         </tr>

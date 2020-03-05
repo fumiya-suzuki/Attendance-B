@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200224032423) do
+ActiveRecord::Schema.define(version: 20200305070440) do
 
   create_table "approvals", force: :cascade do |t|
     t.integer "superior_id"
@@ -34,6 +34,9 @@ ActiveRecord::Schema.define(version: 20200224032423) do
     t.datetime "scheduled_end_time"
     t.string "occupation"
     t.boolean "superior_confirmation"
+    t.integer "over_id"
+    t.integer "over_confirm", default: 0
+    t.boolean "over_change"
     t.index ["user_id"], name: "index_attendances_on_user_id"
   end
 

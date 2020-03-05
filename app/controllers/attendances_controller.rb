@@ -63,6 +63,29 @@ class AttendancesController < ApplicationController
       redirect_to @user
   end
   
+  def index_over_time
+    @user = User.find(params[:id])
+    @attendances = Attendance.where(over_id: @user.id)
+    @attendances.each do |attendance|
+      @users = User.includes(:attendances).where(attendances: {over_id: @user.id})
+    end
+  end
+
+  def over_update
+    @user = User.find(params[:user_id])
+    @attendance = Attendance.find(params[:id])
+    app_params.each do |id, item|
+      @attendance = Attendance.find(id)
+      if params[:user][:attendances][id][:over_change] == "1"
+        if @attendance.update_attributes!(item) 
+          flash[:success] = "変更を送信しました"
+        else
+          flash[:danger] = "変更を送信できませんでした"
+        end
+      end
+    end
+    redirect_to @user
+  end
   
   private
   
@@ -71,7 +94,11 @@ class AttendancesController < ApplicationController
     end
     
     def overtimes_params
-      params.require(:user).permit(attendances: [:scheduled_end_time, :occupation, :superior_confirmation])[:attendances]
+      params.require(:attendance).permit(:scheduled_end_time, :occupation, :over_id)
+    end
+    
+    def app_params
+      params.require(:user).permit(attendances: [:over_confirm])[:attendances]
     end
     
   
