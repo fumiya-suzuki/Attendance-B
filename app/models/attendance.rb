@@ -15,6 +15,8 @@ class Attendance < ApplicationRecord
   # 出勤･退勤時間どちらも存在するとき、どちらか片方のみの変更は無効
   validate :started_at_or_finished_at_only_change_is_invalid
   
+  validate :superior_user_cannot_approval_own
+  
   
   
   def finished_at_is_invalid_without_a_started_at
@@ -48,5 +50,9 @@ class Attendance < ApplicationRecord
         errors.add(:started_at, "のみの更新は出来ません") 
       end
     end
+  end
+  
+  def superior_user_cannot_approval_own
+      errors.add(:over_id, "自分以外の上長ユーザを選択してください") if over_id == user_id
   end
 end

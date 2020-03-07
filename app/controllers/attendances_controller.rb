@@ -94,7 +94,7 @@ class AttendancesController < ApplicationController
     end
     
     def overtimes_params
-      params.require(:attendance).permit(:scheduled_end_time, :occupation, :over_id)
+      params.require(:attendance).permit(:scheduled_end_time, :occupation, :over_id, :over_confirm)
     end
     
     def app_params

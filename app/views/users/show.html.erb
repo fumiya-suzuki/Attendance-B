@@ -43,7 +43,14 @@
         <% end %>
         </li>
       <li><%= link_to  "【勤怠変更申請のお知らせ】", '#' %></li>
-      <li><%= link_to  "【残業申請のお知らせ】", attendances_index_over_time_user_path(@user) %></li>
+      <% if @attendance_count == 0 %>
+        <li><%= link_to  "【残業申請のお知らせ】", attendances_index_over_time_user_path(@user) %></li>
+      <% else %>
+        <li>
+          <%= link_to  "【残業申請のお知らせ】", attendances_index_over_time_user_path(@user), class: "text-danger" %>
+          <span class= "text-danger">申請が<%= @attendance_count %>件あります</span>
+        </li>
+      <% end %>
     </div>
   <% end %>
   
@@ -137,15 +144,28 @@
             <% end %>
           </td>
           <td><%= day.note %></td>
-          <td><%= day.scheduled_end_time.floor_to(15.minutes).strftime('%H') if day.scheduled_end_time.present? %></td>
-          <td><%= day.scheduled_end_time.floor_to(15.minutes).strftime('%M') if day.scheduled_end_time.present? %></td>
+          <% if (day.over_confirm == 2) || (day.over_confirm == 3) %>
+            <td><%= day.scheduled_end_time.floor_to(15.minutes).strftime('%H') if day.scheduled_end_time.present? %></td>
+            <td><%= day.scheduled_end_time.floor_to(15.minutes).strftime('%M') if day.scheduled_end_time.present? %></td>
+            <td>
+              <% if day.scheduled_end_time.present? && day.finished_at.present?%>
+                <%= over_time = working_times(day.finished_at.floor_to(15.minutes), day.scheduled_end_time.floor_to(15.minutes)) %>
+              <% end %>
+            </td>
+            <td><%= day.occupation %></td>
+          <% else %>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          <% end %>
           <td>
-            <% if day.scheduled_end_time.present? && day.finished_at.present?%>
-              <%= over_time = working_times(day.finished_at.floor_to(15.minutes), day.scheduled_end_time.floor_to(15.minutes)) %>
+            <% if day.over_confirm == 2 %>
+              残業承認
+            <% elsif day.over_confirm == 3 %>
+              残業否認
             <% end %>
           </td>
-          <td><%= day.occupation %></td>
-          <td></td>
         </tr>
       <% end %>
     </tbody>
