@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200305070440) do
+ActiveRecord::Schema.define(version: 20200309141913) do
 
   create_table "approvals", force: :cascade do |t|
     t.integer "superior_id"
@@ -37,6 +37,12 @@ ActiveRecord::Schema.define(version: 20200305070440) do
     t.integer "over_id"
     t.integer "over_confirm", default: 0
     t.boolean "over_change"
+    t.integer "onemonth_confirm"
+    t.integer "onemonth_id"
+    t.datetime "beta_started_at"
+    t.datetime "beta_finished_at"
+    t.string "beta_note"
+    t.boolean "one_month_change"
     t.index ["user_id"], name: "index_attendances_on_user_id"
   end
 

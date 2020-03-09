@@ -19,6 +19,7 @@ Rails.application.routes.draw do
       get 'start_employee'
       get 'approvals/index_approvals'
       get 'attendances/index_over_time'
+      get 'attendances/index_one_month'
     end
     resources :attendances, only: :update do
       member do

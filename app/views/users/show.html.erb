@@ -42,7 +42,7 @@
           <span class= "text-danger">申請が<%= @approval_count %>件あります</span>
         <% end %>
         </li>
-      <li><%= link_to  "【勤怠変更申請のお知らせ】", '#' %></li>
+      <li><%= link_to  "【勤怠変更申請のお知らせ】", attendances_index_one_month_user_path(@user) %></li>
       <% if @attendance_count == 0 %>
         <li><%= link_to  "【残業申請のお知らせ】", attendances_index_over_time_user_path(@user) %></li>
       <% else %>

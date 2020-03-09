@@ -13,13 +13,16 @@ class AttendancesController < ApplicationController
     
     # 出勤時間が未登録であることを判定します。
     if @attendance.started_at.nil?
-      if @attendance.update_attributes(started_at: Time.current.change(sec: 0))
+      if @attendance.update_attributes(started_at: Time.current.change(sec: 0),
+        beta_started_at: Time.current.change(sec: 0)
+        )
         flash[:info] = "おはようございます！"
       else
         flash[:danger] = UPDATE_ERROR_MSG
       end
     elsif @attendance.finished_at.nil?
-      if @attendance.update_attributes(finished_at: Time.current.change(sec: 0))
+      if @attendance.update_attributes(finished_at: Time.current.change(sec: 0),
+        beta_finished_at: Time.current.change(sec: 0))
         flash[:info] = "お疲れ様でした。"
       else
         flash[:danger] = UPDATE_ERROR_MSG
@@ -34,8 +37,10 @@ class AttendancesController < ApplicationController
   def update_one_month
     ActiveRecord::Base.transaction do # トランザクションを開始します。
       attendances_params.each do |id, item|
-        attendance = Attendance.find(id)
-        attendance.update_attributes!(item)
+        if params[:user][:attendances][id][:onemonth_id] != nil
+          attendance = Attendance.find(id)
+          attendance.update_attributes!(item)
+        end
       end
     end
     flash[:success] = "1ヶ月分の勤怠情報を更新しました。"
@@ -87,10 +92,18 @@ class AttendancesController < ApplicationController
     redirect_to @user
   end
   
+  def index_one_month
+    @user = User.find(params[:id])
+    @attendances = Attendance.where(onemonth_id: @user.id)
+    @attendances.each do |attendance|
+      @users = User.includes(:attendances).where(attendances: {onemonth_id: @user.id})
+    end
+  end
+  
   private
   
     def attendances_params
-      params.require(:user).permit(attendances: [:started_at, :finished_at, :note])[:attendances]
+      params.require(:user).permit(attendances: [:started_at, :finished_at, :note, :onemonth_id, :beta_started_at, :beta_finished_at, :beta_note, :onemonth_confirm])[:attendances]
     end
     
     def overtimes_params
@@ -99,6 +112,10 @@ class AttendancesController < ApplicationController
     
     def app_params
       params.require(:user).permit(attendances: [:over_confirm])[:attendances]
+    end
+    
+    def one_month_params
+      params.require(:attendance).permit(:onemonth_id)
     end
     
   
