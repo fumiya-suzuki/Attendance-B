@@ -100,6 +100,27 @@ class AttendancesController < ApplicationController
     end
   end
   
+  def one_month_approval_update
+    @user = User.find(params[:user_id])
+    @attendance = Attendance.find(params[:id])
+    one_params.each do |id, item|
+      @attendance = Attendance.find(id)
+      if params[:user][:attendances][id][:one_month_change] == "1"
+        if @attendance.update_attributes!(item) 
+          if params[:user][:attendances][id][:onemonth_confirm] == "2"
+            beta_params.each do |id, attendance|
+              @attendance.update_attributes!(attendance)
+            end
+          end
+          flash[:success] = "変更を送信しました"
+        else
+          flash[:danger] = "変更を送信できませんでした"
+        end
+      end
+    end
+    redirect_to @user
+  end
+  
   private
   
     def attendances_params
@@ -118,6 +139,13 @@ class AttendancesController < ApplicationController
       params.require(:attendance).permit(:onemonth_id)
     end
     
+    def one_params
+      params.require(:user).permit(attendances: [:onemonth_confirm])[:attendances]
+    end
+    
+    def beta_params
+      params.require(:user).permit(attendances: [:started_at, :finished_at, :note])[:attendances]
+    end
   
 
     

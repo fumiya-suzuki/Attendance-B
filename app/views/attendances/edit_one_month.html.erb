@@ -31,20 +31,33 @@
               <td><%= l(day.worked_on, format: :short) %></td>
               <td class="<%= css_class %>"><%= $days_of_the_week[day.worked_on.wday] %></td>
               <% if (Date.current < day.worked_on) %>
-                <td><%= attendance.time_field :beta_started_at, readonly: true, class: "form-control" %></td>
-                <td><%= attendance.time_field :beta_finished_at, readonly: true, class: "form-control" %></td>
+                  <td><%= attendance.time_field :beta_started_at, readonly: true, class: "form-control" %></td>
+                  <td><%= attendance.time_field :beta_finished_at, readonly: true, class: "form-control" %></td>
+                  <td></td>
+                  <td>
+                    <% if day.started_at.present? && day.finished_at.present? %>
+                      <%= working_times(day.started_at, day.finished_at) %>
+                    <% end %>
+                  </td>
+                  <td><%= attendance.text_field :beta_note, readonly: true, class: "form-control" %></td>
+                  <td><%= attendance.collection_select(:onemonth_id, User.where(superior: true) ,:id, :name, {prompt: ""}, readonly: true, class: "form-control") %></td>
               <% else %>
-                <td><%= attendance.time_field :beta_started_at, class: "form-control" %></td>
-                <td><%= attendance.time_field :beta_finished_at, class: "form-control" %></td>
-              <% end %>
-              <td></td>
-              <td>
-                <% if day.started_at.present? && day.finished_at.present? %>
-                  <%= working_times(day.started_at, day.finished_at) %>
+                <% if day.started_at.present? || day.finished_at.present? %>
+                  <td><%= attendance.time_field :beta_started_at, class: "form-control", value: day.started_at.strftime("%H:%M") %></td>
+                  <td><%= attendance.time_field :beta_finished_at, class: "form-control", value: day.finished_at.strftime("%H:%M") %></td>
+                <% else %>
+                  <td><%= attendance.time_field :beta_started_at, class: "form-control" %></td>
+                  <td><%= attendance.time_field :beta_finished_at, class: "form-control" %></td>
                 <% end %>
-              </td>
-              <td><%= attendance.text_field :beta_note, class: "form-control" %></td>
-              <td><%= attendance.collection_select(:onemonth_id, User.where(superior: true) ,:id, :name, {prompt: ""}, class: "form-control") %></td>
+                  <td></td>
+                  <td>
+                    <% if day.started_at.present? && day.finished_at.present? %>
+                      <%= working_times(day.started_at, day.finished_at) %>
+                    <% end %>
+                  </td>
+                  <td><%= attendance.text_field :beta_note, class: "form-control" %></td>
+                  <td><%= attendance.collection_select(:onemonth_id, User.where(superior: true) ,:id, :name, {prompt: ""}, class: "form-control") %></td>
+              <% end %>
               <%= attendance.hidden_field :onemonth_confirm, value: 1 %>
             </tr>
           <% end %>

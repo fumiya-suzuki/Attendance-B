@@ -42,7 +42,15 @@
           <span class= "text-danger">申請が<%= @approval_count %>件あります</span>
         <% end %>
         </li>
-      <li><%= link_to  "【勤怠変更申請のお知らせ】", attendances_index_one_month_user_path(@user) %></li>
+      <li>
+        <% if @attendance_one_count == 0 %>
+          <%= link_to  "【勤怠変更申請のお知らせ】", attendances_index_one_month_user_path(@user) %>
+        <% else %>
+          <%= link_to  "【勤怠変更申請のお知らせ】", attendances_index_one_month_user_path(@user), class: "text-danger" %>
+          <span class= "text-danger">申請が<%= @attendance_one_count %>件あります</span>
+        <% end %>
+      </li>
+          
       <% if @attendance_count == 0 %>
         <li><%= link_to  "【残業申請のお知らせ】", attendances_index_over_time_user_path(@user) %></li>
       <% else %>
@@ -164,6 +172,12 @@
               残業承認
             <% elsif day.over_confirm == 3 %>
               残業否認
+            <% end %>
+            
+            <% if day.onemonth_confirm == 2 %>
+              勤怠申請承認
+            <% elsif day.onemonth_confirm == 3 %>
+              勤怠申請否認
             <% end %>
           </td>
         </tr>

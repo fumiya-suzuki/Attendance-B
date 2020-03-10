@@ -18,6 +18,7 @@ class UsersController < ApplicationController
     @superior_users = User.where(superior: true)
     @worked_sum = @attendances.where.not(started_at: nil).count
     @attendance_count = Attendance.where(over_id: @user.id, over_confirm: 1).count
+    @attendance_one_count = Attendance.where(onemonth_id: @user.id, onemonth_confirm: 1).count
   end
   
   def new

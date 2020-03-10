@@ -17,6 +17,8 @@ class Attendance < ApplicationRecord
   
   validate :superior_user_cannot_approval_own
   
+  validate :superior_user_cannot_approval_own_onemonth
+  
   
   
   def finished_at_is_invalid_without_a_started_at
@@ -55,4 +57,8 @@ class Attendance < ApplicationRecord
   def superior_user_cannot_approval_own
       errors.add(:over_id, "自分以外の上長ユーザを選択してください") if over_id == user_id
   end
+  
+    def superior_user_cannot_approval_own_onemonth
+      errors.add(:onemonth_id, "自分以外の上長ユーザを選択してください") if onemonth_id == user_id
+    end
 end

@@ -12,9 +12,9 @@
     <div class="modal-body">
       <div class="row">
         <div class="col-md-9 col-md-offset-1">
-          <%= form_with(model: @user, url: "#" , local: true) do |f| %>
+          <%= form_with(model: @user, url: one_month_approval_update_user_attendance_path(@user) , local: true) do |f| %>
           <% (@users || []).each do |user| %>
-          <h1>【<%= user.name %>からの残業申請】</h1>
+          <h1>【<%= user.name %>からの勤怠変更申請】</h1>
           <table  class="table table-bordered table-condensed table-hover">
             <tr>
               <th rowspan="3">日付</th>
@@ -79,12 +79,16 @@
               </td>
               <td><%= a.check_box :one_month_change, id: :one_month_checkbox, as: :boolean %></td>
               <td><%= link_to "確認", user_path(attendance.user) ,class: "btn btn-primary"%></td>
+              <%= a.hidden_field :started_at, value: attendance.beta_started_at %>
+              <%= a.hidden_field :finished_at, value: attendance.beta_finished_at %>
+              <%= a.hidden_field :note, value: attendance.beta_note %>
               <% end %>
             </tr>
           <% end %>
           <% end %>
           </table>
           <% end %>
+            <%= f.submit "変更を送信する" ,class: "btn btn-primary btn-lg approval-btn" %>
           <% end %>
         </div>
       </div>
