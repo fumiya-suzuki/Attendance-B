@@ -1,0 +1,83 @@
+<% provide(:class_text, 'one_month') %>
+<% provide(:button_text, '更新') %>
+<div class="modal-dialog modal-lg modal-dialog-center">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h1 class="modal-title">勤怠ログ</h1>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-9 col-md-offset-1">
+          
+          <table  class="table table-bordered table-condensed table-hover">
+
+            <tr>
+              <th rowspan="3">日付</th>
+              <th rowspan="3">曜日</th>
+              <th colspan="4">変更前</th>
+              <th colspan="4">変更後</th>
+              <th rowspan="3">指示者</th>
+              <th rowspan="3">承認日</th>
+            </tr>
+            
+            <tr>
+              <th colspan="2">出社</th>
+              <th colspan="2">退社</th>
+              <th colspan="2">出社</th>
+              <th colspan="2">退社</th>
+            </tr>
+            
+            <tr>
+              <th>時</th>
+              <th>分</th>
+              <th>時</th>
+              <th>分</th>
+              <th>時</th>
+              <th>分</th>
+              <th>時</th>
+              <th>分</th>
+            </tr>
+            <% @attendances.each do |attendance| %>
+            <% if @user.id == attendance.user_id %>
+            <%
+              css_class =  
+              case $days_of_the_week[attendance.worked_on.wday]
+              when '土'
+                'text-primary'
+              when '日'
+                'text-danger'
+              end
+            %>
+            <tr>
+              <td><%= l(attendance.worked_on, format: :time) %></td>
+              <td class="<%= css_class %>"><%= $days_of_the_week[attendance.worked_on.wday] %></td>
+              <td><%= attendance.started_at.floor_to(15.minutes).strftime('%H') if attendance.started_at.present? %></td>
+              <td><%= attendance.started_at.floor_to(15.minutes).strftime('%M') if attendance.started_at.present? %></td>
+              <td><%= attendance.finished_at.floor_to(15.minutes).strftime('%H') if attendance.finished_at.present? %></td>
+              <td><%= attendance.finished_at.floor_to(15.minutes).strftime('%M') if attendance.finished_at.present? %></td>
+              <td><%= attendance.beta_started_at.floor_to(15.minutes).strftime('%H') if attendance.beta_started_at.present? %></td>
+              <td><%= attendance.beta_started_at.floor_to(15.minutes).strftime('%M') if attendance.beta_started_at.present? %></td>
+              <td><%= attendance.beta_finished_at.floor_to(15.minutes).strftime('%H') if attendance.beta_finished_at.present? %></td>
+              <td><%= attendance.beta_finished_at.floor_to(15.minutes).strftime('%M') if attendance.beta_finished_at.present? %></td>
+              <td>
+                <% @superior_users.each do |superior| %>
+                  <% if superior.id == attendance.onemonth_id %>
+                    <%=  superior.name %>
+                  <% end %>
+                <% end %>
+              </td>
+              <td>
+                  <%= l(attendance.updated_at, format: :middle) %>
+              </td>
+            </tr>
+          <% end %>
+          <% end %>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

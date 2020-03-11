@@ -107,11 +107,6 @@ class AttendancesController < ApplicationController
       @attendance = Attendance.find(id)
       if params[:user][:attendances][id][:one_month_change] == "1"
         if @attendance.update_attributes!(item) 
-          if params[:user][:attendances][id][:onemonth_confirm] == "2"
-            beta_params.each do |id, attendance|
-              @attendance.update_attributes!(attendance)
-            end
-          end
           flash[:success] = "変更を送信しました"
         else
           flash[:danger] = "変更を送信できませんでした"
@@ -120,6 +115,17 @@ class AttendancesController < ApplicationController
     end
     redirect_to @user
   end
+  
+  def index_approval_log
+    @user = User.find(params[:id])
+    @attendances = Attendance.where(onemonth_confirm: 2)
+    @attendances.each do |attendance|
+      @users = User.includes(:attendances).where(attendances: {user_id: @user.id, onemonth_confirm: 2})
+      @superior_users = User.includes(:attendances).superior_users
+    end
+
+  end
+  
   
   private
   

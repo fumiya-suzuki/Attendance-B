@@ -36,13 +36,13 @@ ActiveRecord::Schema.define(version: 20200309141913) do
     t.boolean "superior_confirmation"
     t.integer "over_id"
     t.integer "over_confirm", default: 0
-    t.boolean "over_change"
+    t.boolean "over_change", default: false
     t.integer "onemonth_confirm"
     t.integer "onemonth_id"
     t.datetime "beta_started_at"
     t.datetime "beta_finished_at"
     t.string "beta_note"
-    t.boolean "one_month_change"
+    t.boolean "one_month_change", default: false
     t.index ["user_id"], name: "index_attendances_on_user_id"
   end
 
@@ -63,10 +63,10 @@ ActiveRecord::Schema.define(version: 20200309141913) do
     t.string "remember_digest"
     t.boolean "admin", default: false
     t.string "department"
-    t.datetime "basic_time", default: "2020-02-26 23:00:00"
-    t.datetime "work_time", default: "2020-02-26 22:30:00"
-    t.datetime "basic_start_time", default: "2020-02-26 23:00:00"
-    t.datetime "basic_leave_time", default: "2020-02-27 08:00:00"
+    t.datetime "basic_time", default: "2020-03-09 23:00:00"
+    t.datetime "work_time", default: "2020-03-09 22:30:00"
+    t.datetime "basic_start_time", default: "2020-03-09 23:00:00"
+    t.datetime "basic_leave_time", default: "2020-03-10 08:00:00"
     t.boolean "superior", default: false
     t.integer "employee_number"
     t.string "uid"
