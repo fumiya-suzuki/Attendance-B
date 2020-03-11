@@ -39,7 +39,7 @@
               <td><%= l(@attendance.worked_on, format: :short) %></td>
               <td class="<%= css_class %>"><%= $days_of_the_week[@attendance.worked_on.wday] %></td>
               <td><%= f.time_field :scheduled_end_time, class: 'form-control' %></td>
-              <td></td>
+              <td><%= f.check_box :over_next_day, id: :over_checkbox, as: :boolean %></td>
               <td><%= f.text_field :occupation, class: 'form-control' %></td>
               <td>
                 <%= f.collection_select(:over_id, User.where(superior: true) ,:id, :name, {prompt: ""}, class: "form-control") %>

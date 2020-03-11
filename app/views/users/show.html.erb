@@ -150,7 +150,11 @@
           </td>
           <td>
             <% if day.beta_started_at.present? && day.beta_finished_at.present? %>
-              <%= str_times = working_times(day.beta_started_at.floor_to(15.minutes), day.beta_finished_at.floor_to(15.minutes)) %>
+              <% if day.one_next_day == true %>
+                <%= str_times = over_times(day.beta_started_at.floor_to(15.minutes), day.beta_finished_at.floor_to(15.minutes)) %>
+              <% else %>
+                <%= str_times = working_times(day.beta_started_at.floor_to(15.minutes), day.beta_finished_at.floor_to(15.minutes)) %>
+              <% end %>
               <% @total_working_times = @total_working_times.to_f + str_times.to_f %>
             <% end %>
           </td>
@@ -172,14 +176,14 @@
           <td><%= day.finished_at.floor_to(15.minutes).strftime('%M') if day.finished_at.present? %></td>
           <td>
             <% if current_user?(@user) || current_user.admin? %>
-            <% if (Date.current == day.worked_on) && day.started_at.present? && day.finished_at.nil? %>
-              <%= link_to "退勤", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attendance" %>
-            <% end %>
+              <% if (Date.current == day.worked_on) && day.started_at.present? && day.finished_at.nil? %>
+                <%= link_to "退勤", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attendance" %>
+              <% end %>
             <% end %>
           </td>
           <td>
             <% if day.started_at.present? && day.finished_at.present? %>
-              <%= str_times = working_times(day.started_at.floor_to(15.minutes), day.finished_at.floor_to(15.minutes)) %>
+                <%= str_times = working_times(day.started_at.floor_to(15.minutes), day.finished_at.floor_to(15.minutes)) %>
               <% @total_working_times = @total_working_times.to_f + str_times.to_f %>
             <% end %>
           </td>
@@ -192,7 +196,11 @@
             <td><%= day.scheduled_end_time.floor_to(15.minutes).strftime('%M') if day.scheduled_end_time.present? %></td>
             <td>
               <% if day.scheduled_end_time.present? && day.finished_at.present?%>
-                <%= over_time = working_times(day.finished_at.floor_to(15.minutes), day.scheduled_end_time.floor_to(15.minutes)) %>
+                <% if day.over_next_day == true %>
+                  <%= over_time = over_times(day.finished_at.floor_to(15.minutes), day.scheduled_end_time.floor_to(15.minutes)) %>
+                <% else %>
+                  <%= over_time = working_times(day.finished_at.floor_to(15.minutes), day.scheduled_end_time.floor_to(15.minutes)) %>
+                <% end %>
               <% end %>
             </td>
             <td><%= day.occupation %></td>

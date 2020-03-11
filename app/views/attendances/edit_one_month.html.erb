@@ -33,7 +33,7 @@
               <% if (Date.current < day.worked_on) %>
                   <td><%= attendance.time_field :beta_started_at, readonly: true, class: "form-control" %></td>
                   <td><%= attendance.time_field :beta_finished_at, readonly: true, class: "form-control" %></td>
-                  <td></td>
+                  <td><%= attendance.check_box :one_next_day, readonly: true, id: :next_checkbox, as: :boolean %></td>
                   <td>
                     <% if day.started_at.present? && day.finished_at.present? %>
                       <%= working_times(day.started_at, day.finished_at) %>
@@ -49,7 +49,7 @@
                   <td><%= attendance.time_field :beta_started_at, class: "form-control" %></td>
                   <td><%= attendance.time_field :beta_finished_at, class: "form-control" %></td>
                 <% end %>
-                  <td></td>
+                  <td><%= attendance.check_box :one_next_day, id: :next_checkbox, as: :boolean %></td>
                   <td>
                     <% if day.started_at.present? && day.finished_at.present? %>
                       <%= working_times(day.started_at, day.finished_at) %>

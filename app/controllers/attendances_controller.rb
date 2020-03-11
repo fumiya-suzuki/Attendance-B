@@ -130,11 +130,11 @@ class AttendancesController < ApplicationController
   private
   
     def attendances_params
-      params.require(:user).permit(attendances: [:started_at, :finished_at, :note, :onemonth_id, :beta_started_at, :beta_finished_at, :beta_note, :onemonth_confirm])[:attendances]
+      params.require(:user).permit(attendances: [:started_at, :finished_at, :note, :onemonth_id, :beta_started_at, :beta_finished_at, :beta_note, :onemonth_confirm, :one_next_day])[:attendances]
     end
     
     def overtimes_params
-      params.require(:attendance).permit(:scheduled_end_time, :occupation, :over_id, :over_confirm)
+      params.require(:attendance).permit(:scheduled_end_time, :occupation, :over_id, :over_confirm, :over_next_day)
     end
     
     def app_params
