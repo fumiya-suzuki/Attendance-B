@@ -8,6 +8,7 @@
   <h1>ユーザー一覧</h1>
 <% end %>
 
+
 <div class ="border border-muted search">
   <p>検索</p>
     <%= form_tag users_path, method: 'get' do %>
@@ -15,8 +16,14 @@
       <%= submit_tag '検索', :name => nil, class: "btn btn-lg btn-primary search-btn" %>
     <% end %>
 </div>
-
+  
 <div class="col-md-10 col-md-offset-1">
+  <div class = "csv">
+    <%= form_tag import_users_path multipart: true do %>
+      <%= file_field_tag :file, class: "form-control form-csv" %>
+      <%= submit_tag "CSVをインポート" , class: "form-control btn btn-primary"%>
+    <% end %>
+  </div>
   <%= will_paginate %>
     <% @users.each do |user| %>
       <div class="user-name"><%= link_to user.name, user %></div>
