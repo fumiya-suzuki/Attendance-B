@@ -195,11 +195,11 @@
             <td><%= day.scheduled_end_time.floor_to(15.minutes).strftime('%H') if day.scheduled_end_time.present? %></td>
             <td><%= day.scheduled_end_time.floor_to(15.minutes).strftime('%M') if day.scheduled_end_time.present? %></td>
             <td>
-              <% if day.scheduled_end_time.present? && day.finished_at.present?%>
+              <% if day.scheduled_end_time.present? %>
                 <% if day.over_next_day == true %>
-                  <%= over_time = over_times(day.finished_at.floor_to(15.minutes), day.scheduled_end_time.floor_to(15.minutes)) %>
+                  <%= next_over_times = out_times(@user.basic_leave_time.hour, day.scheduled_end_time.hour, @user.basic_leave_time.min, day.scheduled_end_time.min) %>
                 <% else %>
-                  <%= over_time = working_times(day.finished_at.floor_to(15.minutes), day.scheduled_end_time.floor_to(15.minutes)) %>
+                  <%= over_times = out_times(@user.basic_leave_time.hour, day.scheduled_end_time.hour, @user.basic_leave_time.min, day.scheduled_end_time.min) %>
                 <% end %>
               <% end %>
             </td>

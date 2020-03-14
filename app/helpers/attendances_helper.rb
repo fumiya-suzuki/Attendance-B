@@ -14,8 +14,16 @@ module AttendancesHelper
     format("%.2f", (((finish - start) / 60) / 60.0))
   end
   
+  def out_times(start, finish, startmin, finishmin)
+    format("%.2f", ((finish - start)) + ((finish - start) / 60))
+  end
+  
+  def next_out_times(start, finish, startmin, finishmin)
+    format("%.2f", (((finish - start)) + ((finish - start) / 60) + 24))
+  end
+  
   def over_times(start, finish)
     format("%.2f", ((((finish - start) / 60) / 60.0) + 24.0))
   end
-
+  
 end

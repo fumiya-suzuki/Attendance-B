@@ -20,9 +20,15 @@
           <tr>
             <td><%= l(attendance.worked_on, format: :short) %></td>
             <td><%= $days_of_the_week[attendance.worked_on.wday] %></td>
-            <td><%= attendance.scheduled_end_time.floor_to(15.minutes).strftime('%H:%M')%></td>
+            <td><%= attendance.scheduled_end_time.floor_to(15.minutes).strftime("%H:%M") %></td>
             <td><%= format_basic_info(user.basic_leave_time) %></td>
-            <td></td>
+            <td>
+                <% if attendance.over_next_day == true %>
+                  <%= next_over_times = out_times(user.basic_leave_time.hour, attendance.scheduled_end_time.hour, user.basic_leave_time.min, attendance.scheduled_end_time.min) %>
+                <% else %>
+                  <%= over_times = out_times(user.basic_leave_time.hour, attendance.scheduled_end_time.hour, user.basic_leave_time.min, attendance.scheduled_end_time.min) %>
+                <% end %>
+            </td>
             <td><%= attendance.occupation %></td>
             <td>
               <%= a.select :over_confirm,[
