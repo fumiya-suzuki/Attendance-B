@@ -1,5 +1,7 @@
 class ApprovalsController < ApplicationController
   protect_from_forgery
+  
+  before_action :superior_user, only: [:index_approvals, :update]
 
   def update
     @user = User.find(params[:user_id])
@@ -49,7 +51,7 @@ class ApprovalsController < ApplicationController
     @approval = @user.approvals.find_by(month: "#{@first_day}", user_id: @user.id)
   
     if @approval.update_attributes(app_params)
-      flash[:success] = "申請しました！"
+      flash[:success] = "申請しましたyo！"
     else
       flash[:danger] = "申請する上長を選択してください."
     end

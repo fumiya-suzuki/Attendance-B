@@ -12,6 +12,7 @@
     <div class="modal-body">
       <div class="row">
         <div class="col-md-9 col-md-offset-1">
+          <%= form_with(model: [@user, @attendance], url: update_overtime_user_attendance_path(@user, @attendance), local: true, method: :patch) do |f| %>
           <table  class="table table-bordered table-condensed table-hover">
             <tr>
               <th>日付</th>
@@ -22,7 +23,7 @@
               <th>指示者確認㊞</th>
             </tr>
             
-            <%= form_with(model: [@user, @attendance], url: update_overtime_user_attendance_path(@user, @attendance), local: true, method: :patch) do |f| %>
+            
             <tr>
               
               
@@ -42,11 +43,12 @@
               <td><%= f.check_box :over_next_day, id: :over_checkbox, as: :boolean %></td>
               <td><%= f.text_field :occupation, class: 'form-control' %></td>
               <td>
-                <%= f.collection_select(:over_id, User.where(superior: true) ,:id, :name, {prompt: ""}, class: "form-control") %>
+                <%= f.collection_select(:over_id, User.where(superior: true).where.not(id: @user.id) ,:id, :name, {prompt: ""}, class: "form-control") %>
+                <%= f.hidden_field :over_confirm, value: 1 %>
+                <%= f.hidden_field :over_month, value: @first_day %>
               </td>
             </tr>
           </table>
-            <%= f.hidden_field :over_confirm, value: 1 %>
             <%= f.submit yield(:button_text), class: "btn btn-primary btn-#{yield(:class_text)} overtime-btn" %>
           <% end %>
         </div>

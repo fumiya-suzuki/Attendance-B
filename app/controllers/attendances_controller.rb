@@ -59,11 +59,15 @@ class AttendancesController < ApplicationController
   
   def update_overtime
     @user = User.find(params[:user_id])
-    @attendance = Attendance.find(params[:id])
-    if @attendance.update_attributes(overtimes_params)
-      flash[:success] = "残業申請しました。"
+    unless (params[:attendance][:over_id] == nil) || (params[:attendance][:scheduled_end_time] == nil)
+      @attendance = Attendance.find(params[:id])
+      if @attendance.update_attributes(overtimes_params)
+        flash[:success] = "残業申請しました。"
+      else
+        flash[:danger] = "無効なデータがありました。"
+      end
     else
-      flash[:danger] = "無効なデータがありました。"
+      flash[:danger] = "残業申請できませんでした。"
     end
       redirect_to @user
   end
@@ -134,7 +138,7 @@ class AttendancesController < ApplicationController
     end
     
     def overtimes_params
-      params.require(:attendance).permit(:scheduled_end_time, :occupation, :over_id, :over_confirm, :over_next_day)
+      params.require(:attendance).permit(:scheduled_end_time, :occupation, :over_id, :over_confirm, :over_next_day, :over_month)
     end
     
     def app_params
@@ -146,7 +150,7 @@ class AttendancesController < ApplicationController
     end
     
     def one_params
-      params.require(:user).permit(attendances: [:onemonth_confirm])[:attendances]
+      params.require(:user).permit(attendances: [:onemonth_confirm, :one_month])[:attendances]
     end
     
     def beta_params

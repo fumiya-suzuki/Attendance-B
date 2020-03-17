@@ -1,5 +1,7 @@
-<div class= "btn-approval">
+<div class= "btn-approval modal-dialog modal-lg modal-dialog-center">
+  <div class= "modal-content">
   <%= form_with(model: @user, url: over_update_user_attendance_path(@user) , local: true, method: :patch) do |f| %>
+  <div class = "modal-body">
     <% (@users || []).each do |user| %>
       <h1>【<%= user.name %>からの残業申請】</h1>
         <table class="table table-bordered table-condensed table-hover">
@@ -20,7 +22,7 @@
           <tr>
             <td><%= l(attendance.worked_on, format: :short) %></td>
             <td><%= $days_of_the_week[attendance.worked_on.wday] %></td>
-            <td><%= attendance.scheduled_end_time.floor_to(15.minutes).strftime("%H:%M") %></td>
+            <td><%= attendance.scheduled_end_time.floor_to(15.minutes).strftime("%H:%M") if attendance.scheduled_end_time.present? %></td>
             <td><%= format_basic_info(user.basic_leave_time) %></td>
             <td>
                 <% if attendance.over_next_day == true %>
@@ -40,7 +42,7 @@
                       %>
             </td>
             <td><%= a.check_box :over_change, id: :over_checkbox, as: :boolean %></td>
-            <td><%= link_to "確認", user_path(attendance.user) ,class: "btn btn-primary"%></td>
+            <td><%= link_to "確認", user_path(attendance.user, date: attendance.one_month) ,class: "btn btn-primary"%></td>
           </tr>
           <% end %>
         <% end %>
@@ -54,5 +56,7 @@
         <h2>現在申請はありません</h2>
       <% end %>
     </div>
+    </div>
   <% end %>
+  </div>
 </div>

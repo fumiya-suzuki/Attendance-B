@@ -41,7 +41,7 @@
                 <td>
                   <%= a.check_box :approval_change, id: :approval_checkbox, as: :boolean %>
                 </td>
-                <td><%= link_to "確認", user_path(approval.user) ,class: "btn btn-primary"%></td>
+                <td><%= link_to "確認", user_path(approval.user, date: approval.month) ,class: "btn btn-primary"%></td>
               </tr>
            <% end %>
           <% end %>

@@ -78,7 +78,7 @@
                       %>
               </td>
               <td><%= a.check_box :one_month_change, id: :one_month_checkbox, as: :boolean %></td>
-              <td><%= link_to "確認", user_path(attendance.user) ,class: "btn btn-primary"%></td>
+              <td><%= link_to "確認", user_path(attendance.user, date: attendance.one_month) ,class: "btn btn-primary"%></td>
               <%= a.hidden_field :started_at, value: attendance.beta_started_at %>
               <%= a.hidden_field :finished_at, value: attendance.beta_finished_at %>
               <%= a.hidden_field :note, value: attendance.beta_note %>

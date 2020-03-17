@@ -44,18 +44,18 @@
         </li>
       <li>
         <% if @attendance_one_count == 0 %>
-          <%= link_to  "【勤怠変更申請のお知らせ】", attendances_index_one_month_user_path(@user) %>
+          <%= link_to  "【勤怠変更申請のお知らせ】", attendances_index_one_month_user_path(@user), remote: true %>
         <% else %>
-          <%= link_to  "【勤怠変更申請のお知らせ】", attendances_index_one_month_user_path(@user), class: "text-danger" %>
+          <%= link_to  "【勤怠変更申請のお知らせ】", attendances_index_one_month_user_path(@user), remote: true, class: "text-danger" %>
           <span class= "text-danger">申請が<%= @attendance_one_count %>件あります</span>
         <% end %>
       </li>
           
       <% if @attendance_count == 0 %>
-        <li><%= link_to  "【残業申請のお知らせ】", attendances_index_over_time_user_path(@user) %></li>
+        <li><%= link_to  "【残業申請のお知らせ】", attendances_index_over_time_user_path(@user), remote: true %></li>
       <% else %>
         <li>
-          <%= link_to  "【残業申請のお知らせ】", attendances_index_over_time_user_path(@user), class: "text-danger" %>
+          <%= link_to  "【残業申請のお知らせ】", attendances_index_over_time_user_path(@user), remote: true, class: "text-danger" %>
           <span class= "text-danger">申請が<%= @attendance_count %>件あります</span>
         </li>
       <% end %>
@@ -120,7 +120,7 @@
         <tr>
           <td>
             <% if current_user?(@user) || current_user.admin? %>
-              <%= link_to "残業申請", edit_overtime_user_attendance_path(@user, day), class: "btn btn-primary btn-attendance" %>
+              <%= link_to "残業申請", edit_overtime_user_attendance_path(@user, day), remote: true, class: "btn btn-primary btn-attendance" %>
             <% end %>
           </td>
           <td>
@@ -213,6 +213,8 @@
           <td>
             <% if day.over_confirm == 2 %>
               残業承認
+            <% elsif day.over_confirm == 1 %>
+             User.find_by(id: day.over_id).name %>へ残業申請中
             <% elsif day.over_confirm == 3 %>
               残業否認
             <% end %>
@@ -240,7 +242,7 @@
           <% if (@approvals == nil) || (@approvals.superior_comfirm == 0) %>
             <div>なし</div>
           <% elsif @approvals.superior_comfirm == 1 %>           
-            <div>申請中</div>
+            <div><%= User.find_by(id: @approvals.superior_id).name %>へ申請中</div>
           <% elsif @approvals.superior_comfirm == 2 %>
             <div>承認</div>
           <% elsif @approvals.superior_comfirm == 3 %>
@@ -249,7 +251,7 @@
           <% if current_user?(@user) || current_user.admin? %>
             <% if @approvals == nil %>
               <%= form_with(model: [@user, @approval], url: user_approvals_path(@user), method: :post, local: true) do |f| %>
-                <%= f.collection_select(:superior_id, User.where(superior: true) ,:id, :name, {prompt: ""}, class: "form-control") %>
+                <%= f.collection_select(:superior_id, User.where(superior: true).where.not(id: @user.id) ,:id, :name, {prompt: ""}, class: "form-control") %>
                 <%= f.hidden_field :superior_comfirm, value: 1 %>
                 <%= f.hidden_field :approval_change, value: "false" %>
                 <%= f.hidden_field :month, value: @first_day %>
@@ -257,7 +259,7 @@
               <% end %>
             <% else %>
               <%= form_with(model: [@user, @approval], url: approval_update_user_approval_path(@user), method: :patch, local: true) do |f| %>
-                <%= f.collection_select(:superior_id, User.where(superior: true) ,:id, :name, {prompt: ""}, class: "form-control") %>
+                <%= f.collection_select(:superior_id, User.where(superior: true).where.not(id: @user.id) ,:id, :name, {prompt: ""}, class: "form-control") %>
                 <%= f.hidden_field :superior_comfirm, value: 1 %>
                 <%= f.submit "申請" ,class: "btn btn-success" %>
               <% end %>
@@ -279,3 +281,7 @@
 
 <!--モーダルウインドウ表示-->
 <div id="index-approvals" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+
+<div id="index-one-month" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+
+<div id="index-over-time" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>

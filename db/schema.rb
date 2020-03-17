@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200311042922) do
+ActiveRecord::Schema.define(version: 20200316132039) do
 
   create_table "approvals", force: :cascade do |t|
     t.integer "superior_id"
@@ -43,8 +43,10 @@ ActiveRecord::Schema.define(version: 20200311042922) do
     t.datetime "beta_finished_at"
     t.string "beta_note"
     t.boolean "one_month_change", default: false
-    t.boolean "over_next_day"
-    t.boolean "one_next_day"
+    t.boolean "over_next_day", default: false
+    t.boolean "one_next_day", default: false
+    t.date "one_month"
+    t.date "over_month"
     t.index ["user_id"], name: "index_attendances_on_user_id"
   end
 
@@ -65,10 +67,10 @@ ActiveRecord::Schema.define(version: 20200311042922) do
     t.string "remember_digest"
     t.boolean "admin", default: false
     t.string "department"
-    t.datetime "basic_time", default: "2020-03-09 23:00:00"
-    t.datetime "work_time", default: "2020-03-09 22:30:00"
-    t.datetime "basic_start_time", default: "2020-03-09 23:00:00"
-    t.datetime "basic_leave_time", default: "2020-03-10 08:00:00"
+    t.datetime "basic_time", default: "2020-03-16 23:00:00"
+    t.datetime "work_time", default: "2020-03-16 22:30:00"
+    t.datetime "basic_start_time", default: "2020-03-16 23:00:00"
+    t.datetime "basic_leave_time", default: "2020-03-17 08:00:00"
     t.boolean "superior", default: false
     t.integer "employee_number"
     t.string "uid"
