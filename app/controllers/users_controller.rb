@@ -7,6 +7,7 @@ class UsersController < ApplicationController
   before_action :update_employee, only: :update_basic_info
   before_action :update, only: :update_basic_info
   
+  
   def index
     @users = User.paginate(page: params[:page]).search(params[:search])
   end

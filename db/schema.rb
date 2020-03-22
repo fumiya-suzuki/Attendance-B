@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200316132039) do
+ActiveRecord::Schema.define(version: 20200322132350) do
 
   create_table "approvals", force: :cascade do |t|
     t.integer "superior_id"
@@ -21,6 +21,13 @@ ActiveRecord::Schema.define(version: 20200316132039) do
     t.boolean "approval_change"
     t.date "month"
     t.index ["user_id"], name: "index_approvals_on_user_id"
+  end
+
+  create_table "attendance_approvals", force: :cascade do |t|
+    t.integer "attendance_id"
+    t.integer "approval_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "attendances", force: :cascade do |t|
@@ -67,13 +74,14 @@ ActiveRecord::Schema.define(version: 20200316132039) do
     t.string "remember_digest"
     t.boolean "admin", default: false
     t.string "department"
-    t.datetime "basic_time", default: "2020-03-16 23:00:00"
-    t.datetime "work_time", default: "2020-03-16 22:30:00"
-    t.datetime "basic_start_time", default: "2020-03-16 23:00:00"
-    t.datetime "basic_leave_time", default: "2020-03-17 08:00:00"
+    t.datetime "basic_time", default: "2020-03-21 23:00:00"
+    t.datetime "work_time", default: "2020-03-21 22:30:00"
+    t.datetime "basic_start_time", default: "2020-03-21 23:00:00"
+    t.datetime "basic_leave_time", default: "2020-03-22 08:00:00"
     t.boolean "superior", default: false
     t.integer "employee_number"
     t.string "uid"
+    t.date "now_month"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 

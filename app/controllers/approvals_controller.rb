@@ -1,6 +1,6 @@
 class ApprovalsController < ApplicationController
   protect_from_forgery
-  
+
   before_action :superior_user, only: [:index_approvals, :update]
 
   def update
@@ -32,6 +32,7 @@ class ApprovalsController < ApplicationController
   
   def create
     @user = User.find(params[:user_id])
+    @approvals = @user.approvals.where(id: @user.id)
     @approval = @user.approvals.create(approvals_params)
     @superior_user = User.superior_users
         if @approval.save
@@ -43,17 +44,12 @@ class ApprovalsController < ApplicationController
   end
   
   def approval_update
-    @first_day = params[:date].nil? ?
-    Date.current.beginning_of_month : params[:date].to_date
-    @last_day = @first_day.end_of_month
-    one_month = [*@first_day..@last_day] # 対象の月の日数を代入します。
     @user = User.find(params[:user_id])
-    @approval = @user.approvals.find_by(month: "#{@first_day}", user_id: @user.id)
-  
+    @approval = @user.approvals.find_by(user_id: @user.id, month: params[:date])
     if @approval.update_attributes(app_params)
       flash[:success] = "申請しましたyo！"
     else
-      flash[:danger] = "申請する上長を選択してください."
+      flash[:danger] = "申請する上長を選択してください"
     end
     redirect_to user_path(@user)
   end 

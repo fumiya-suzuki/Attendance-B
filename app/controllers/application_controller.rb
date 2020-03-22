@@ -70,11 +70,6 @@ class ApplicationController < ActionController::Base
     redirect_to root_url
   end
   
-  def set_day
-    @first_day = params[:date].nil? ?
-    Date.current.beginning_of_month : params[:date].to_date
-    @last_day = @first_day.end_of_month
-  end
   
     private
     
