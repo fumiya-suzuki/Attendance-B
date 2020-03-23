@@ -6,15 +6,17 @@ class UsersController < ApplicationController
   before_action :set_one_month, only: :show
   before_action :update_employee, only: :update_basic_info
   before_action :update, only: :update_basic_info
+  before_action :admin_user_own, only: [:show, :edit, :update]
   
   
   def index
-    @users = User.paginate(page: params[:page]).search(params[:search])
+    @users = User.where(admin: false).paginate(page: params[:page]).search(params[:search])
   end
   
   def show
     @approval = Approval.new
     @approvals = Approval.find_by(month: "#{@first_day}", user_id: @user.id)
+    @attendance = Attendance.where(onemonth_id: 2)
     @approval_count = Approval.where(superior_id: @user.id, superior_comfirm: 1).count
     @superior_users = User.superior_users
     @worked_sum = @attendances.where.not(started_at: nil).count

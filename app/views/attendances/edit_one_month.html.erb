@@ -42,11 +42,14 @@
                   <td><%= attendance.text_field :beta_note, readonly: true, class: "form-control" %></td>
                   <td><%= attendance.collection_select(:onemonth_id, User.where(superior: true) ,:id, :name, {prompt: ""}, readonly: true, class: "form-control") %></td>
               <% else %>
-                <% if day.started_at.present? || day.finished_at.present? %>
+                <% if day.started_at.present? %>
                   <td><%= attendance.time_field :beta_started_at, class: "form-control", value: day.started_at.strftime("%H:%M") %></td>
-                  <td><%= attendance.time_field :beta_finished_at, class: "form-control", value: day.finished_at.strftime("%H:%M") %></td>
                 <% else %>
                   <td><%= attendance.time_field :beta_started_at, class: "form-control" %></td>
+                <% end %>
+                <% if day.finished_at.present? %>
+                  <td><%= attendance.time_field :beta_finished_at, class: "form-control", value: day.finished_at.strftime("%H:%M") %></td>
+                <% else %>
                   <td><%= attendance.time_field :beta_finished_at, class: "form-control" %></td>
                 <% end %>
                   <td><%= attendance.check_box :one_next_day, id: :next_checkbox, as: :boolean %></td>

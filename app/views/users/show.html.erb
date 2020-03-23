@@ -214,7 +214,9 @@
             <% if day.over_confirm == 2 %>
               残業承認
             <% elsif day.over_confirm == 1 %>
-             User.find_by(id: day.over_id).name %>へ残業申請中
+              <% if day.over_id.present? %>
+               <%= User.find_by(id: day.over_id).name %>へ残業申請中
+              <% end %>
             <% elsif day.over_confirm == 3 %>
               残業否認
             <% end %>
@@ -223,6 +225,10 @@
               勤怠申請承認
             <% elsif day.onemonth_confirm == 3 %>
               勤怠申請否認
+            <% elsif day.onemonth_confirm == 1 %>
+              <% if day.onemonth_id.present? %>
+                <%= User.find_by(id: day.onemonth_id).name %>へ勤怠申請中  
+              <% end %>
             <% end %>
           </td>
         </tr>

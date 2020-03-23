@@ -40,6 +40,13 @@ class ApplicationController < ActionController::Base
       end
      end
      
+     def admin_user_own
+      if current_user.admin?
+       redirect_to root_url if current_user.admin?
+       flash[:danger] = "管理人は自身のページにアクセス出来ません"
+      end
+     end
+     
      def superior_user
        unless current_user.superior?
         redirect_to root_url unless current_user.superior?

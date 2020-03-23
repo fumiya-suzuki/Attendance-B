@@ -8,7 +8,11 @@
     <nav>
       <ul class="nav navbar-nav navbar-right">
         <% if logged_in? %>
-          <li><%= link_to "トップへ", current_user %></li>
+          <% if current_user.admin? %>
+            <li><%= link_to "トップへ", root_path %></li>
+          <% else %>
+            <li><%= link_to "トップへ", current_user %></li>
+          <% end %>
         <% else %>
           <li><%= link_to "トップへ", root_path %></li>
         <% end %>

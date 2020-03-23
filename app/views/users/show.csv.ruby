@@ -4,7 +4,7 @@ CSV.generate do |csv|
   csv << []
   column_names = %w(日付 出社時間 退社時間 備考)
   csv << column_names
-  @attendances.each do |attendance|
+  @attendance.each do |attendance|
     column_values = [
      if attendance.worked_on.present?
       attendance.worked_on.strftime("%m/%d")

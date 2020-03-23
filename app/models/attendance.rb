@@ -25,6 +25,9 @@ class Attendance < ApplicationRecord
   
   validate :superior_user_cannot_approval_own_onemonth
   
+  validate :beta_started_at_only_is_invalid
+  
+  validate :beta_finished_at_only_delete_invalid
   
     
     
@@ -66,7 +69,7 @@ class Attendance < ApplicationRecord
   
   def started_at_cannot_only_delete
     if started_at_was.present? || finished_at_was.present?
-     errors.add(:started_at, "のみの削除は出来ません") unless (started_at.nil? && finished_at.nil?) || (started_at.present? && finished_at.present?)
+     errors.add(:started_at, "のみの削除は出来ません") unless (beta_started_at.nil? && beta_finished_at.nil?) || (beta_started_at.present? && beta_finished_at.present?)
     end  
   end
 
@@ -89,5 +92,16 @@ class Attendance < ApplicationRecord
     errors.add(:onemonth_id, "自分以外の上長ユーザを選択してください") if onemonth_id == user_id
   end
   
+  def beta_started_at_only_is_invalid
+    if beta_started_at_was.blank? && started_at.blank?
+      errors.add(:beta_started_at, "のみの更新は出来ません") if beta_started_at.present? && beta_finished_at.blank?
+    end
+  end
+  
+  def beta_finished_at_only_delete_invalid
+    if beta_started_at_was.present? && beta_finished_at_was.present?
+      errors.add(:beta_finished_at, "のみの削除は出来ません") if beta_started_at.present? && beta_finished_at.blank?
+    end
+  end
 
 end
