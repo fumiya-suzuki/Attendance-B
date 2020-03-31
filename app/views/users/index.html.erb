@@ -19,7 +19,7 @@
   
 <div class="col-md-10 col-md-offset-1">
   <div class = "csv">
-    <%= form_tag import_users_path multipart: true do %>
+    <%= form_tag import_users_path, multipart: true do %>
       <%= file_field_tag :file, class: "form-control form-csv" %>
       <%= submit_tag "CSVをインポート" , class: "form-control btn btn-primary"%>
     <% end %>
