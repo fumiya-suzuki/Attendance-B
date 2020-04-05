@@ -75,6 +75,7 @@ class UsersController < ApplicationController
     else
       flash[:danger] = "#{@user.name}の更新は失敗しました。<br>" + @user.errors.full_messages.join("<br>")
     end
+    redirect_to users_url
   end
   
   def search
@@ -101,7 +102,8 @@ class UsersController < ApplicationController
       redirect_to users_url
     else
       User.import(params[:file])
-      redirect_to users_url, notice: "userを追加しました"
+      redirect_to users_url
+      flash[:notice] = "ユーザーを追加しました"
     end
   end
 
