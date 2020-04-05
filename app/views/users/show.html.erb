@@ -191,6 +191,7 @@
           
           <% end %>
           
+          
           <% if (day.over_confirm == 2) || (day.over_confirm == 3) %>
             <td><%= day.scheduled_end_time.floor_to(15.minutes).strftime('%H') if day.scheduled_end_time.present? %></td>
             <td><%= day.scheduled_end_time.floor_to(15.minutes).strftime('%M') if day.scheduled_end_time.present? %></td>
