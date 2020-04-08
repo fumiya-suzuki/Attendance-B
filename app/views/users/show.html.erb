@@ -268,7 +268,7 @@
               <%= form_with(model: [@user, @approval], url: approval_update_user_approval_path(@user, date: @first_day), method: :patch, local: true) do |f| %>
                 <%= f.collection_select(:superior_id, User.where(superior: true).where.not(id: @user.id) ,:id, :name, {prompt: ""}, class: "form-control") %>
                 <%= f.hidden_field :superior_comfirm, value: 1 %>
-                <%= f.submit "申請" ,class: "btn btn-success" %>
+                <%= f.submit "申請" ,class: "btn btn-primary" %>
               <% end %>
             <% end %>
           <% end %>
