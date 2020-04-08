@@ -45,7 +45,7 @@
               <th>分</th>
             </tr>
             <% @attendances.each do |attendance| %>
-            <% if user.id == attendance.user_id %>
+            <% if (user.id == attendance.user_id) && (attendance.onemonth_confirm == 1) %>
             <%
               css_class =  
               case $days_of_the_week[attendance.worked_on.wday]

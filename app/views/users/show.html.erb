@@ -65,7 +65,7 @@
 
   <div class="btn-users-show">
     <%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-primary" %>
-    <%= link_to "CSV出力", user_path(format: :csv), class: "btn btn-primary" %>
+    <%= link_to "CSV出力", user_path(format: :csv, date: @first_day), class: "btn btn-primary" %>
   </div>
   <div>
     <%= link_to "勤怠修正ログ(承認済)", attendances_index_approval_log_user_path(@user), class: "btn btn-primary" %>
@@ -198,7 +198,7 @@
             <td>
               <% if day.scheduled_end_time.present? %>
                 <% if day.over_next_day == true %>
-                  <%= next_over_times = out_times(@user.basic_leave_time.hour, day.scheduled_end_time.hour, @user.basic_leave_time.min, day.scheduled_end_time.min) %>
+                  <%= next_over_times = next_out_times(@user.basic_leave_time.hour, day.scheduled_end_time.hour, @user.basic_leave_time.min, day.scheduled_end_time.min) %>
                 <% else %>
                   <%= over_times = out_times(@user.basic_leave_time.hour, day.scheduled_end_time.hour, @user.basic_leave_time.min, day.scheduled_end_time.min) %>
                 <% end %>

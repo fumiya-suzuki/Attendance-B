@@ -19,7 +19,7 @@ module AttendancesHelper
   end
   
   def next_out_times(start, finish, startmin, finishmin)
-    format("%.2f", (((finish - start)) + ((finish - start) / 60) + 24))
+    format("%.2f", (((finish - start)) + ((finishmin - startmin) / 60) + 24))
   end
   
   def over_times(start, finish)

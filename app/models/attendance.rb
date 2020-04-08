@@ -40,11 +40,11 @@ class Attendance < ApplicationRecord
   end
   
   def beta_finished_at_is_invalid_without_a_beta_started_at
-    errors.add(:beta_started_at, "が必要です") if beta_started_at.blank? && beta_finished_at.present?
+    errors.add(:beta_started_at, "が必要です") if beta_started_at.blank? && beta_finished_at.present? && onemonth_id != nil
   end
   
   def beta_started_at_is_invalid_without_a_beta_finished_at
-    errors.add(:beta_finished_at, "が必要です") if beta_finished_at.blank? && beta_started_at.present?
+    errors.add(:beta_finished_at, "が必要です") if beta_finished_at.blank? && beta_started_at.present? && onemonth_id != nil
   end
   
   def started_at_than_finished_at_fast_if_invalid
@@ -55,7 +55,7 @@ class Attendance < ApplicationRecord
   
   def beta_started_at_than_beta_finished_at_fast_if_invalid
     if beta_started_at.present? && beta_finished_at.present?
-      if one_next_day == false 
+      if one_next_day == false && onemonth_id != nil
         errors.add(:beta_started_at, "より早い退勤時間は無効です") if beta_started_at > beta_finished_at
       end
     end
@@ -69,7 +69,9 @@ class Attendance < ApplicationRecord
   
   def started_at_cannot_only_delete
     if started_at_was.present? || finished_at_was.present?
-     errors.add(:started_at, "のみの削除は出来ません") unless (beta_started_at.nil? && beta_finished_at.nil?) || (beta_started_at.present? && beta_finished_at.present?)
+      if onemonth_id != nil
+        errors.add(:started_at, "のみの削除は出来ません") unless (beta_started_at.nil? && beta_finished_at.nil?) || (beta_started_at.present? && beta_finished_at.present?)
+      end
     end  
   end
 
@@ -93,14 +95,14 @@ class Attendance < ApplicationRecord
   end
   
   def beta_started_at_only_is_invalid
-    if beta_started_at_was.blank? && started_at.blank?
-      errors.add(:beta_started_at, "のみの更新は出来ません") if beta_started_at.present? && beta_finished_at.blank?
+    if started_at.blank?
+      errors.add(:beta_started_at, "のみの更新は出来ません") if beta_started_at.present? && beta_finished_at.blank? && onemonth_id != nil
     end
   end
   
   def beta_finished_at_only_delete_invalid
     if beta_started_at_was.present? && beta_finished_at_was.present?
-      errors.add(:beta_finished_at, "のみの削除は出来ません") if beta_started_at.present? && beta_finished_at.blank?
+      errors.add(:beta_finished_at, "のみの削除は出来ません") if beta_started_at.present? && beta_finished_at.blank? && onemonth_id != nil
     end
   end
 

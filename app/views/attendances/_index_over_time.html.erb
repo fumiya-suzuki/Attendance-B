@@ -17,7 +17,7 @@
             <th>勤怠を確認する</th>
           </tr>
       <% @attendances.each do |attendance| %>
-        <% if user.id == attendance.user_id %>
+        <% if (user.id == attendance.user_id) && (attendance.over_confirm == 1)%>
           <%= f.fields_for "attendances[]", attendance do |a| %>
           <tr>
             <td><%= l(attendance.worked_on, format: :short) %></td>
@@ -26,7 +26,7 @@
             <td><%= format_basic_info(user.basic_leave_time) %></td>
             <td>
                 <% if attendance.over_next_day == true %>
-                  <%= next_over_times = out_times(user.basic_leave_time.hour, attendance.scheduled_end_time.hour, user.basic_leave_time.min, attendance.scheduled_end_time.min) %>
+                  <%= next_over_times = next_out_times(user.basic_leave_time.hour, attendance.scheduled_end_time.hour, user.basic_leave_time.min, attendance.scheduled_end_time.min) %>
                 <% else %>
                   <%= over_times = out_times(user.basic_leave_time.hour, attendance.scheduled_end_time.hour, user.basic_leave_time.min, attendance.scheduled_end_time.min) %>
                 <% end %>
