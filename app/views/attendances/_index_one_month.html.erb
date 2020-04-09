@@ -88,7 +88,11 @@
           <% end %>
           </table>
           <% end %>
-            <%= f.submit "変更を送信する" ,class: "btn btn-primary btn-lg approval-btn" %>
+            <% unless @users.count == 0 %>
+              <%= f.submit "変更を送信する" ,class: "btn btn-primary btn-lg approval-btn" %>
+            <% else %>
+              <h2>現在申請はありません</h2>
+            <% end %>
           <% end %>
         </div>
       </div>

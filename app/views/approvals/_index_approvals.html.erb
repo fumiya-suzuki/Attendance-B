@@ -1,9 +1,11 @@
-<div class="modal-dialog modal-lg modal-dialog-center modal-content">
+<div class="modal-dialog modal-lg modal-dialog-center">
+  <div class="modal-content">
   <div class="btn-approval">
     <div class= "modal-title modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
+      <h1 class="modal-title">所属長承認申請</h1>
     </div>
   <%= form_with(model: @user, url: user_approval_path(@user, @approvals) , local: true, method: :put) do |f| %>
     <% (@users || []).each do |user| %>
@@ -51,7 +53,7 @@
         </div>
   <% end %>
     <div class="modal-footer">
-    <% unless @users == [] %>
+    <% unless @users == nil %>
       <%= f.submit "変更を送信する" ,class: "btn btn-primary btn-lg approval-btn" %>
     <% else %>
       <h2>現在申請はありません</h2>
@@ -60,4 +62,5 @@
       </div>
     </div>
   <% end %>
+  </div>
 </div>

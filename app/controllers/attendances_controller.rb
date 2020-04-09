@@ -75,7 +75,7 @@ class AttendancesController < ApplicationController
     @user = User.find(params[:id])
     @attendances = Attendance.where(over_id: @user.id)
     @attendances.each do |attendance|
-      @users = User.includes(:attendances).where(attendances: {over_id: @user.id})
+      @users = User.includes(:attendances).where(attendances: {over_id: @user.id, over_confirm: 1})
     end
   end
 
@@ -99,7 +99,7 @@ class AttendancesController < ApplicationController
     @user = User.find(params[:id])
     @attendances = Attendance.where(onemonth_id: @user.id)
     @attendances.each do |attendance|
-      @users = User.includes(:attendances).where(attendances: {onemonth_id: @user.id})
+      @users = User.includes(:attendances).where(attendances: {onemonth_id: @user.id, onemonth_confirm: 1})
     end
   end
   

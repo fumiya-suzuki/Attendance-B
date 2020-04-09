@@ -1,5 +1,11 @@
 <div class= "btn-approval modal-dialog modal-lg modal-dialog-center">
   <div class= "modal-content">
+    <div class= "modal-title modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h1 class="modal-title">残業申請</h1>
+    </div>
   <%= form_with(model: @user, url: over_update_user_attendance_path(@user) , local: true, method: :patch) do |f| %>
   <div class = "modal-body">
     <% (@users || []).each do |user| %>
