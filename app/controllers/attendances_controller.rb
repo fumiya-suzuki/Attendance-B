@@ -43,7 +43,7 @@ class AttendancesController < ApplicationController
         end
       end
     end
-    flash[:success] = "1ヶ月分の勤怠情報の更新を申請しました。"
+    flash[:success] = "1ヶ月分の勤怠情報更新を申請しました。"
     redirect_to user_url(date: params[:date])
   rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐
     flash[:danger] = "無効な入力データがあったため、更新をキャンセルしました。"

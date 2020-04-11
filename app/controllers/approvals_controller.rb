@@ -47,7 +47,7 @@ class ApprovalsController < ApplicationController
     @user = User.find(params[:user_id])
     @approval = @user.approvals.find_by(user_id: @user.id, month: params[:date])
     if @approval.update_attributes(app_params)
-      flash[:success] = "申請しましたyo！"
+      flash[:success] = "申請しました！"
     else
       flash[:danger] = "申請する上長を選択してください"
     end
